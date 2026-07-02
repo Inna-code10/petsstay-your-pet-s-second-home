@@ -193,25 +193,25 @@ function Header() {
 }
 
 function LangSwitcher({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
+  const langs: { code: Lang; label: string }[] = [
+    { code: "en", label: "EN" },
+    { code: "ru", label: "RU" },
+    { code: "el", label: "GR" },
+  ];
   return (
     <div className="inline-flex items-center rounded-full border border-border bg-white/80 backdrop-blur p-1 text-xs font-semibold">
       <Globe className="h-3.5 w-3.5 ml-2 mr-1 text-muted-foreground" />
-      <button
-        onClick={() => setLang("en")}
-        className={`px-2.5 py-1 rounded-full transition-colors ${
-          lang === "en" ? "bg-foreground text-background" : "text-foreground/70 hover:text-foreground"
-        }`}
-      >
-        EN
-      </button>
-      <button
-        onClick={() => setLang("ru")}
-        className={`px-2.5 py-1 rounded-full transition-colors ${
-          lang === "ru" ? "bg-foreground text-background" : "text-foreground/70 hover:text-foreground"
-        }`}
-      >
-        RU
-      </button>
+      {langs.map((l) => (
+        <button
+          key={l.code}
+          onClick={() => setLang(l.code)}
+          className={`px-2.5 py-1 rounded-full transition-colors ${
+            lang === l.code ? "bg-foreground text-background" : "text-foreground/70 hover:text-foreground"
+          }`}
+        >
+          {l.label}
+        </button>
+      ))}
     </div>
   );
 }

@@ -614,13 +614,13 @@ function Calculator() {
                 <div className="mt-2 flex items-baseline gap-2">
                   <div className="text-6xl md:text-7xl font-extrabold tracking-tight">€{total}</div>
                 </div>
-                <div className="mt-1 text-white/85 text-sm font-semibold">€{perDay}{t("calc_per_day")} · {days} × {count} {count > 1 ? "pets" : "pet"}</div>
+                <div className="mt-1 text-white/85 text-sm font-semibold">€{perDay}{t("calc_per_day")} · {days} × {count} {count > 1 ? t("calc_pet_many") : t("calc_pet_one")}</div>
 
                 <div className="mt-6 space-y-2 text-sm">
                   <Row label={pet === "dog" ? t("book_dog") : t("book_cat")} value={`€${base}${t("calc_per_day")}`} />
-                  {meds && <Row label={t("calc_meds")} value="+€5/day" />}
-                  {walk && <Row label={t("calc_walk")} value="+€6/day" />}
-                  {food && <Row label={t("calc_food")} value="+€4/day" />}
+                  {meds && <Row label={t("calc_meds")} value={`+€5${t("calc_per_day")}`} />}
+                  {walk && <Row label={t("calc_walk")} value={`+€6${t("calc_per_day")}`} />}
+                  {food && <Row label={t("calc_food")} value={`+€4${t("calc_per_day")}`} />}
                 </div>
 
                 <a href="#book" className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white text-primary px-5 py-3.5 text-sm font-bold hover:scale-[1.02] transition-transform">

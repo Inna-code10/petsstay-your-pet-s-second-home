@@ -584,7 +584,7 @@ function Calculator() {
               <div className="sm:col-span-2">
                 <div className="flex items-center justify-between">
                   <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{t("calc_days")}</div>
-                  <div className="text-sm font-bold">{days} {days === 1 ? "night" : "nights"}</div>
+                  <div className="text-sm font-bold">{days} {days === 1 ? t("calc_night") : t("calc_nights")}</div>
                 </div>
                 <input
                   type="range"

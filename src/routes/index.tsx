@@ -1094,7 +1094,7 @@ function Footer() {
             <div className="text-[11px] font-bold uppercase tracking-wider text-background/60">{t("footer_hours")}</div>
             <ul className="mt-4 space-y-2 text-sm">
               <li>{t("loc_hours_val")}</li>
-              <li className="text-background/60">Reception open daily</li>
+              <li className="text-background/60">{t("footer_reception")}</li>
             </ul>
           </div>
 

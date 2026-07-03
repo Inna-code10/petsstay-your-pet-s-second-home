@@ -655,6 +655,7 @@ function Stepper({ value, onChange, min, max }: { value: number; onChange: (v: n
 }
 
 function Toggle({ icon: Icon, label, price, active, onToggle }: { icon: typeof Pill; label: string; price: string; active: boolean; onToggle: () => void }) {
+  const { t } = useI18n();
   return (
     <button
       type="button"
@@ -669,7 +670,7 @@ function Toggle({ icon: Icon, label, price, active, onToggle }: { icon: typeof P
         </div>
         <div className="flex-1">
           <div className="text-sm font-bold leading-tight">{label}</div>
-          <div className="text-xs text-muted-foreground">{price}/day</div>
+          <div className="text-xs text-muted-foreground">{price}{t("calc_per_day")}</div>
         </div>
         <div className={`h-5 w-5 rounded-full border-2 flex items-center justify-center ${active ? "border-primary bg-primary" : "border-border"}`}>
           {active && <Check className="h-3 w-3 text-white" strokeWidth={3} />}

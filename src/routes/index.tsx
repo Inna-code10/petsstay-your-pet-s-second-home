@@ -721,9 +721,9 @@ function HowItWorks() {
 function Team() {
   const { t } = useI18n();
   const members = [
-    { img: team1, name: "Maria Ioannou", role: "Founder & Head Caretaker", years: "8", bio: "Certified animal behaviorist who treats every guest like her own." },
-    { img: team2, name: "Andreas Petrou", role: "Resident Veterinarian", years: "6", bio: "On-call for check-ups, medications and emergencies — day or night." },
-    { img: team3, name: "Elena Georgiou", role: "Senior Pet Sitter", years: "5", bio: "Specialist in senior dogs and shy cats. Endless patience, endless love." },
+    { img: team1, name: t("team1_name"), role: t("team1_role"), years: "8", bio: t("team1_bio") },
+    { img: team2, name: t("team2_name"), role: t("team2_role"), years: "6", bio: t("team2_bio") },
+    { img: team3, name: t("team3_name"), role: t("team3_role"), years: "5", bio: t("team3_bio") },
   ];
   return (
     <section className="py-20 md:py-28">
@@ -735,7 +735,7 @@ function Team() {
               <div className="relative">
                 <img src={m.img} alt={m.name} loading="lazy" width={600} height={700} className="w-full h-80 object-cover" />
                 <div className="absolute top-4 left-4 glass rounded-full px-3 py-1 text-xs font-bold">
-                  {m.years}+ yrs experience
+                  {m.years}+ {t("team_years_exp")}
                 </div>
               </div>
               <div className="p-6">

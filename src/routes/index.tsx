@@ -845,56 +845,31 @@ function Gallery() {
 
 /* ------------------------------ TESTIMONIALS ------------------------------ */
 
-const REVIEWS = [
-  {
-    name: "Sophia K.",
-    pet: "Bruno · Labrador",
-    photo: c1,
-    text: "Our Labrador absolutely loved staying here. Every day we received photos and updates. We finally enjoyed our vacation without worrying.",
-  },
-  {
-    name: "Dimitris P.",
-    pet: "Luna · Siamese cat",
-    photo: c2,
-    text: "The team is incredibly professional and warm. Luna is usually shy, but she felt at home from day one. Highly recommend.",
-  },
-  {
-    name: "Anna V.",
-    pet: "Milo · Persian cat",
-    photo: c3,
-    text: "Immaculate facility, transparent pricing, and daily WhatsApp updates. It's the peace of mind you can't put a price on.",
-  },
-  {
-    name: "Nikos S.",
-    pet: "Rex · German Shepherd",
-    photo: c2,
-    text: "Rex needs medication twice a day and PetSStay handled it perfectly. I got a photo of every dose. Unbelievable service.",
-  },
-  {
-    name: "Elena M.",
-    pet: "Cookie · Poodle",
-    photo: c1,
-    text: "The photos we received were more than we asked for. Cookie came back happier than when she left!",
-  },
-  {
-    name: "Yiannis A.",
-    pet: "Simba · Maine Coon",
-    photo: c3,
-    text: "Best boarding in Limassol, period. Clean, calm, and full of people who genuinely love animals.",
-  },
-];
+const REVIEW_PHOTOS = [c1, c2, c3, c2, c1, c3];
 
 function Testimonials() {
   const { t } = useI18n();
+  const REVIEWS = useMemo(
+    () => [
+      { name: t("r1_name"), pet: t("r1_pet"), photo: REVIEW_PHOTOS[0], text: t("r1_text") },
+      { name: t("r2_name"), pet: t("r2_pet"), photo: REVIEW_PHOTOS[1], text: t("r2_text") },
+      { name: t("r3_name"), pet: t("r3_pet"), photo: REVIEW_PHOTOS[2], text: t("r3_text") },
+      { name: t("r4_name"), pet: t("r4_pet"), photo: REVIEW_PHOTOS[3], text: t("r4_text") },
+      { name: t("r5_name"), pet: t("r5_pet"), photo: REVIEW_PHOTOS[4], text: t("r5_text") },
+      { name: t("r6_name"), pet: t("r6_pet"), photo: REVIEW_PHOTOS[5], text: t("r6_text") },
+    ],
+    [t],
+  );
   const [idx, setIdx] = useState(0);
   const visible = useMemo(() => {
     return [REVIEWS[idx], REVIEWS[(idx + 1) % REVIEWS.length], REVIEWS[(idx + 2) % REVIEWS.length]];
-  }, [idx]);
+  }, [idx, REVIEWS]);
 
   useEffect(() => {
     const id = setInterval(() => setIdx((i) => (i + 1) % REVIEWS.length), 5500);
     return () => clearInterval(id);
-  }, []);
+  }, [REVIEWS.length]);
+
 
   return (
     <section id="reviews" className="py-20 md:py-28">

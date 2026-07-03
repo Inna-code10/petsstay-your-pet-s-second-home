@@ -196,7 +196,7 @@ function LangSwitcher({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => voi
   const langs: { code: Lang; label: string }[] = [
     { code: "en", label: "EN" },
     { code: "ru", label: "RU" },
-    { code: "el", label: "GR" },
+    { code: "el", label: "EL" },
   ];
   return (
     <div className="inline-flex items-center rounded-full border border-border bg-white/80 backdrop-blur p-1 text-xs font-semibold">

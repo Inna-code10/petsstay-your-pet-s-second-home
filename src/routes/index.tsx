@@ -293,8 +293,8 @@ function Hero() {
                   ))}
                 </div>
                 <div className="text-sm">
-                  <div className="font-bold">4.9 Rating</div>
-                  <div className="text-muted-foreground text-xs">from 300+ reviews</div>
+                  <div className="font-bold">4.9 {t("hero_rating_label")}</div>
+                  <div className="text-muted-foreground text-xs">{t("hero_reviews_from")}</div>
                 </div>
               </div>
 
@@ -302,8 +302,8 @@ function Hero() {
                 <div className="flex items-center gap-2">
                   <Heart className="h-4 w-4 text-primary fill-primary" />
                   <div>
-                    <div className="text-sm font-bold">523+ Happy Pets</div>
-                    <div className="text-[11px] text-muted-foreground">and counting</div>
+                    <div className="text-sm font-bold">523+ {t("hero_happy_pets")}</div>
+                    <div className="text-[11px] text-muted-foreground">{t("hero_and_counting")}</div>
                   </div>
                 </div>
               </div>
@@ -311,14 +311,14 @@ function Hero() {
               <div className="absolute -left-3 bottom-6 glass rounded-2xl shadow-[var(--shadow-card)] px-4 py-3 animate-float" style={{ animationDelay: "-4s" }}>
                 <div className="flex items-center gap-2">
                   <CalendarCheck className="h-4 w-4 text-accent" />
-                  <div className="text-sm font-bold">1,240+ Bookings</div>
+                  <div className="text-sm font-bold">1,240+ {t("hero_bookings_label")}</div>
                 </div>
               </div>
 
               <div className="absolute -right-3 bottom-10 glass rounded-2xl shadow-[var(--shadow-card)] px-4 py-3 animate-float" style={{ animationDelay: "-1s" }}>
                 <div className="flex items-center gap-2">
                   <Moon className="h-4 w-4 text-primary" />
-                  <div className="text-sm font-bold">24/7 Care</div>
+                  <div className="text-sm font-bold">{t("hero_247")}</div>
                 </div>
               </div>
             </div>

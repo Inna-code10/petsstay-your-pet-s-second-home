@@ -360,10 +360,10 @@ function BookingForm() {
         </div>
 
         <Field label={t("book_name")} className="md:col-span-6 lg:col-span-2">
-          <input required placeholder="Anna" className="input-base" />
+          <input required placeholder={t("book_name_ph")} className="input-base" />
         </Field>
         <Field label={t("book_phone")} className="md:col-span-6 lg:col-span-2">
-          <input required type="tel" placeholder="+357 …" className="input-base" />
+          <input required type="tel" placeholder={t("book_phone_ph")} className="input-base" />
         </Field>
         <Field label={t("book_pet")} className="md:col-span-4 lg:col-span-1">
           <div className="flex rounded-full bg-cream p-1 h-[46px]">

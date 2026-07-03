@@ -1111,7 +1111,7 @@ function Footer() {
 
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-background/60">
           <div>© {new Date().getFullYear()} PetSStay. {t("footer_rights")}</div>
-          <div>Made with <Heart className="inline h-3 w-3 text-primary fill-primary" /> in Limassol, Cyprus</div>
+          <div className="inline-flex items-center gap-1">{t("footer_made")} <Heart className="inline h-3 w-3 text-primary fill-primary" /></div>
         </div>
       </div>
     </footer>

@@ -196,7 +196,7 @@ function LangSwitcher({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => voi
   const langs: { code: Lang; label: string }[] = [
     { code: "en", label: "EN" },
     { code: "ru", label: "RU" },
-    { code: "el", label: "GR" },
+    { code: "el", label: "EL" },
   ];
   return (
     <div className="inline-flex items-center rounded-full border border-border bg-white/80 backdrop-blur p-1 text-xs font-semibold">
@@ -293,8 +293,8 @@ function Hero() {
                   ))}
                 </div>
                 <div className="text-sm">
-                  <div className="font-bold">4.9 Rating</div>
-                  <div className="text-muted-foreground text-xs">from 300+ reviews</div>
+                  <div className="font-bold">4.9 {t("hero_rating_label")}</div>
+                  <div className="text-muted-foreground text-xs">{t("hero_reviews_from")}</div>
                 </div>
               </div>
 
@@ -302,8 +302,8 @@ function Hero() {
                 <div className="flex items-center gap-2">
                   <Heart className="h-4 w-4 text-primary fill-primary" />
                   <div>
-                    <div className="text-sm font-bold">523+ Happy Pets</div>
-                    <div className="text-[11px] text-muted-foreground">and counting</div>
+                    <div className="text-sm font-bold">523+ {t("hero_happy_pets")}</div>
+                    <div className="text-[11px] text-muted-foreground">{t("hero_and_counting")}</div>
                   </div>
                 </div>
               </div>
@@ -311,14 +311,14 @@ function Hero() {
               <div className="absolute -left-3 bottom-6 glass rounded-2xl shadow-[var(--shadow-card)] px-4 py-3 animate-float" style={{ animationDelay: "-4s" }}>
                 <div className="flex items-center gap-2">
                   <CalendarCheck className="h-4 w-4 text-accent" />
-                  <div className="text-sm font-bold">1,240+ Bookings</div>
+                  <div className="text-sm font-bold">1,240+ {t("hero_bookings_label")}</div>
                 </div>
               </div>
 
               <div className="absolute -right-3 bottom-10 glass rounded-2xl shadow-[var(--shadow-card)] px-4 py-3 animate-float" style={{ animationDelay: "-1s" }}>
                 <div className="flex items-center gap-2">
                   <Moon className="h-4 w-4 text-primary" />
-                  <div className="text-sm font-bold">24/7 Care</div>
+                  <div className="text-sm font-bold">{t("hero_247")}</div>
                 </div>
               </div>
             </div>
@@ -360,10 +360,10 @@ function BookingForm() {
         </div>
 
         <Field label={t("book_name")} className="md:col-span-6 lg:col-span-2">
-          <input required placeholder="Anna" className="input-base" />
+          <input required placeholder={t("book_name_ph")} className="input-base" />
         </Field>
         <Field label={t("book_phone")} className="md:col-span-6 lg:col-span-2">
-          <input required type="tel" placeholder="+357 …" className="input-base" />
+          <input required type="tel" placeholder={t("book_phone_ph")} className="input-base" />
         </Field>
         <Field label={t("book_pet")} className="md:col-span-4 lg:col-span-1">
           <div className="flex rounded-full bg-cream p-1 h-[46px]">
@@ -584,7 +584,7 @@ function Calculator() {
               <div className="sm:col-span-2">
                 <div className="flex items-center justify-between">
                   <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{t("calc_days")}</div>
-                  <div className="text-sm font-bold">{days} {days === 1 ? "night" : "nights"}</div>
+                  <div className="text-sm font-bold">{days} {days === 1 ? t("calc_night") : t("calc_nights")}</div>
                 </div>
                 <input
                   type="range"
@@ -614,13 +614,13 @@ function Calculator() {
                 <div className="mt-2 flex items-baseline gap-2">
                   <div className="text-6xl md:text-7xl font-extrabold tracking-tight">€{total}</div>
                 </div>
-                <div className="mt-1 text-white/85 text-sm font-semibold">€{perDay}{t("calc_per_day")} · {days} × {count} {count > 1 ? "pets" : "pet"}</div>
+                <div className="mt-1 text-white/85 text-sm font-semibold">€{perDay}{t("calc_per_day")} · {days} × {count} {count > 1 ? t("calc_pet_many") : t("calc_pet_one")}</div>
 
                 <div className="mt-6 space-y-2 text-sm">
                   <Row label={pet === "dog" ? t("book_dog") : t("book_cat")} value={`€${base}${t("calc_per_day")}`} />
-                  {meds && <Row label={t("calc_meds")} value="+€5/day" />}
-                  {walk && <Row label={t("calc_walk")} value="+€6/day" />}
-                  {food && <Row label={t("calc_food")} value="+€4/day" />}
+                  {meds && <Row label={t("calc_meds")} value={`+€5${t("calc_per_day")}`} />}
+                  {walk && <Row label={t("calc_walk")} value={`+€6${t("calc_per_day")}`} />}
+                  {food && <Row label={t("calc_food")} value={`+€4${t("calc_per_day")}`} />}
                 </div>
 
                 <a href="#book" className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white text-primary px-5 py-3.5 text-sm font-bold hover:scale-[1.02] transition-transform">
@@ -655,6 +655,7 @@ function Stepper({ value, onChange, min, max }: { value: number; onChange: (v: n
 }
 
 function Toggle({ icon: Icon, label, price, active, onToggle }: { icon: typeof Pill; label: string; price: string; active: boolean; onToggle: () => void }) {
+  const { t } = useI18n();
   return (
     <button
       type="button"
@@ -669,7 +670,7 @@ function Toggle({ icon: Icon, label, price, active, onToggle }: { icon: typeof P
         </div>
         <div className="flex-1">
           <div className="text-sm font-bold leading-tight">{label}</div>
-          <div className="text-xs text-muted-foreground">{price}/day</div>
+          <div className="text-xs text-muted-foreground">{price}{t("calc_per_day")}</div>
         </div>
         <div className={`h-5 w-5 rounded-full border-2 flex items-center justify-center ${active ? "border-primary bg-primary" : "border-border"}`}>
           {active && <Check className="h-3 w-3 text-white" strokeWidth={3} />}
@@ -720,9 +721,9 @@ function HowItWorks() {
 function Team() {
   const { t } = useI18n();
   const members = [
-    { img: team1, name: "Maria Ioannou", role: "Founder & Head Caretaker", years: "8", bio: "Certified animal behaviorist who treats every guest like her own." },
-    { img: team2, name: "Andreas Petrou", role: "Resident Veterinarian", years: "6", bio: "On-call for check-ups, medications and emergencies — day or night." },
-    { img: team3, name: "Elena Georgiou", role: "Senior Pet Sitter", years: "5", bio: "Specialist in senior dogs and shy cats. Endless patience, endless love." },
+    { img: team1, name: t("team1_name"), role: t("team1_role"), years: "8", bio: t("team1_bio") },
+    { img: team2, name: t("team2_name"), role: t("team2_role"), years: "6", bio: t("team2_bio") },
+    { img: team3, name: t("team3_name"), role: t("team3_role"), years: "5", bio: t("team3_bio") },
   ];
   return (
     <section className="py-20 md:py-28">
@@ -734,7 +735,7 @@ function Team() {
               <div className="relative">
                 <img src={m.img} alt={m.name} loading="lazy" width={600} height={700} className="w-full h-80 object-cover" />
                 <div className="absolute top-4 left-4 glass rounded-full px-3 py-1 text-xs font-bold">
-                  {m.years}+ yrs experience
+                  {m.years}+ {t("team_years_exp")}
                 </div>
               </div>
               <div className="p-6">
@@ -844,56 +845,31 @@ function Gallery() {
 
 /* ------------------------------ TESTIMONIALS ------------------------------ */
 
-const REVIEWS = [
-  {
-    name: "Sophia K.",
-    pet: "Bruno · Labrador",
-    photo: c1,
-    text: "Our Labrador absolutely loved staying here. Every day we received photos and updates. We finally enjoyed our vacation without worrying.",
-  },
-  {
-    name: "Dimitris P.",
-    pet: "Luna · Siamese cat",
-    photo: c2,
-    text: "The team is incredibly professional and warm. Luna is usually shy, but she felt at home from day one. Highly recommend.",
-  },
-  {
-    name: "Anna V.",
-    pet: "Milo · Persian cat",
-    photo: c3,
-    text: "Immaculate facility, transparent pricing, and daily WhatsApp updates. It's the peace of mind you can't put a price on.",
-  },
-  {
-    name: "Nikos S.",
-    pet: "Rex · German Shepherd",
-    photo: c2,
-    text: "Rex needs medication twice a day and PetSStay handled it perfectly. I got a photo of every dose. Unbelievable service.",
-  },
-  {
-    name: "Elena M.",
-    pet: "Cookie · Poodle",
-    photo: c1,
-    text: "The photos we received were more than we asked for. Cookie came back happier than when she left!",
-  },
-  {
-    name: "Yiannis A.",
-    pet: "Simba · Maine Coon",
-    photo: c3,
-    text: "Best boarding in Limassol, period. Clean, calm, and full of people who genuinely love animals.",
-  },
-];
+const REVIEW_PHOTOS = [c1, c2, c3, c2, c1, c3];
 
 function Testimonials() {
   const { t } = useI18n();
+  const REVIEWS = useMemo(
+    () => [
+      { name: t("r1_name"), pet: t("r1_pet"), photo: REVIEW_PHOTOS[0], text: t("r1_text") },
+      { name: t("r2_name"), pet: t("r2_pet"), photo: REVIEW_PHOTOS[1], text: t("r2_text") },
+      { name: t("r3_name"), pet: t("r3_pet"), photo: REVIEW_PHOTOS[2], text: t("r3_text") },
+      { name: t("r4_name"), pet: t("r4_pet"), photo: REVIEW_PHOTOS[3], text: t("r4_text") },
+      { name: t("r5_name"), pet: t("r5_pet"), photo: REVIEW_PHOTOS[4], text: t("r5_text") },
+      { name: t("r6_name"), pet: t("r6_pet"), photo: REVIEW_PHOTOS[5], text: t("r6_text") },
+    ],
+    [t],
+  );
   const [idx, setIdx] = useState(0);
   const visible = useMemo(() => {
     return [REVIEWS[idx], REVIEWS[(idx + 1) % REVIEWS.length], REVIEWS[(idx + 2) % REVIEWS.length]];
-  }, [idx]);
+  }, [idx, REVIEWS]);
 
   useEffect(() => {
     const id = setInterval(() => setIdx((i) => (i + 1) % REVIEWS.length), 5500);
     return () => clearInterval(id);
-  }, []);
+  }, [REVIEWS.length]);
+
 
   return (
     <section id="reviews" className="py-20 md:py-28">
@@ -1118,7 +1094,7 @@ function Footer() {
             <div className="text-[11px] font-bold uppercase tracking-wider text-background/60">{t("footer_hours")}</div>
             <ul className="mt-4 space-y-2 text-sm">
               <li>{t("loc_hours_val")}</li>
-              <li className="text-background/60">Reception open daily</li>
+              <li className="text-background/60">{t("footer_reception")}</li>
             </ul>
           </div>
 
@@ -1135,7 +1111,7 @@ function Footer() {
 
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-background/60">
           <div>© {new Date().getFullYear()} PetSStay. {t("footer_rights")}</div>
-          <div>Made with <Heart className="inline h-3 w-3 text-primary fill-primary" /> in Limassol, Cyprus</div>
+          <div className="inline-flex items-center gap-1">{t("footer_made")} <Heart className="inline h-3 w-3 text-primary fill-primary" /></div>
         </div>
       </div>
     </footer>

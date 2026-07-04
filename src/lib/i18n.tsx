@@ -203,6 +203,28 @@ const en: Dict = {
   r6_text: "Best boarding in Limassol, period. Clean, calm, and full of people who genuinely love animals.",
 
   wa_tooltip: "Need help? Chat with us!",
+
+  cf_eyebrow: "Contact us",
+  cf_title: "Send us a message",
+  cf_sub: "Questions about a stay, a tour of our facility or a special request? We reply within a few hours.",
+  cf_name: "Full name",
+  cf_name_ph: "Anna Georgiou",
+  cf_email: "Email address",
+  cf_email_ph: "you@example.com",
+  cf_phone: "Phone number",
+  cf_phone_ph: "+357 …",
+  cf_optional: "optional",
+  cf_subject: "Subject",
+  cf_subject_ph: "Booking inquiry, facility tour…",
+  cf_message: "Message",
+  cf_message_ph: "Tell us a little about your pet and dates you have in mind…",
+  cf_submit: "Send Message",
+  cf_submitting: "Sending…",
+  cf_success: "Thank you! Your message has been sent successfully.",
+  cf_err_required: "This field is required.",
+  cf_err_email: "Please enter a valid email address.",
+  cf_info_title: "Reach us directly",
+  cf_info_sub: "Prefer to talk? We're one tap away.",
 };
 
 const ru: Dict = {

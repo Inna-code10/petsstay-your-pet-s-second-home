@@ -203,6 +203,28 @@ const en: Dict = {
   r6_text: "Best boarding in Limassol, period. Clean, calm, and full of people who genuinely love animals.",
 
   wa_tooltip: "Need help? Chat with us!",
+
+  cf_eyebrow: "Contact us",
+  cf_title: "Send us a message",
+  cf_sub: "Questions about a stay, a tour of our facility or a special request? We reply within a few hours.",
+  cf_name: "Full name",
+  cf_name_ph: "Anna Georgiou",
+  cf_email: "Email address",
+  cf_email_ph: "you@example.com",
+  cf_phone: "Phone number",
+  cf_phone_ph: "+357 …",
+  cf_optional: "optional",
+  cf_subject: "Subject",
+  cf_subject_ph: "Booking inquiry, facility tour…",
+  cf_message: "Message",
+  cf_message_ph: "Tell us a little about your pet and dates you have in mind…",
+  cf_submit: "Send Message",
+  cf_submitting: "Sending…",
+  cf_success: "Thank you! Your message has been sent successfully.",
+  cf_err_required: "This field is required.",
+  cf_err_email: "Please enter a valid email address.",
+  cf_info_title: "Reach us directly",
+  cf_info_sub: "Prefer to talk? We're one tap away.",
 };
 
 const ru: Dict = {
@@ -404,6 +426,28 @@ const ru: Dict = {
   r6_text: "Лучшая передержка в Лимасоле, точка. Чисто, спокойно и люди, которые искренне любят животных.",
 
   wa_tooltip: "Нужна помощь? Напишите нам!",
+
+  cf_eyebrow: "Свяжитесь с нами",
+  cf_title: "Отправьте нам сообщение",
+  cf_sub: "Есть вопросы о проживании, экскурсии по нашему центру или особая просьба? Мы отвечаем в течение нескольких часов.",
+  cf_name: "Полное имя",
+  cf_name_ph: "Анна Георгиу",
+  cf_email: "Электронная почта",
+  cf_email_ph: "you@example.com",
+  cf_phone: "Номер телефона",
+  cf_phone_ph: "+357 …",
+  cf_optional: "необязательно",
+  cf_subject: "Тема",
+  cf_subject_ph: "Бронирование, экскурсия…",
+  cf_message: "Сообщение",
+  cf_message_ph: "Расскажите немного о вашем питомце и предполагаемых датах…",
+  cf_submit: "Отправить сообщение",
+  cf_submitting: "Отправка…",
+  cf_success: "Спасибо! Ваше сообщение успешно отправлено.",
+  cf_err_required: "Это поле обязательно.",
+  cf_err_email: "Введите корректный адрес электронной почты.",
+  cf_info_title: "Связаться напрямую",
+  cf_info_sub: "Хотите поговорить? Мы на связи.",
 };
 
 const el: Dict = {
@@ -605,6 +649,28 @@ const el: Dict = {
   r6_text: "Η καλύτερη φιλοξενία στη Λεμεσό. Καθαρά, ήρεμα και άνθρωποι που πραγματικά αγαπούν τα ζώα.",
 
   wa_tooltip: "Χρειάζεστε βοήθεια; Γράψτε μας!",
+
+  cf_eyebrow: "Επικοινωνήστε μαζί μας",
+  cf_title: "Στείλτε μας ένα μήνυμα",
+  cf_sub: "Ερωτήσεις για διαμονή, ξενάγηση στον χώρο μας ή ειδικό αίτημα; Απαντάμε μέσα σε λίγες ώρες.",
+  cf_name: "Ονοματεπώνυμο",
+  cf_name_ph: "Άννα Γεωργίου",
+  cf_email: "Διεύθυνση email",
+  cf_email_ph: "you@example.com",
+  cf_phone: "Αριθμός τηλεφώνου",
+  cf_phone_ph: "+357 …",
+  cf_optional: "προαιρετικό",
+  cf_subject: "Θέμα",
+  cf_subject_ph: "Κράτηση, ξενάγηση στον χώρο…",
+  cf_message: "Μήνυμα",
+  cf_message_ph: "Πείτε μας λίγα λόγια για το κατοικίδιό σας και τις ημερομηνίες που έχετε υπόψη…",
+  cf_submit: "Αποστολή μηνύματος",
+  cf_submitting: "Αποστολή…",
+  cf_success: "Ευχαριστούμε! Το μήνυμά σας στάλθηκε με επιτυχία.",
+  cf_err_required: "Αυτό το πεδίο είναι υποχρεωτικό.",
+  cf_err_email: "Παρακαλώ εισάγετε ένα έγκυρο email.",
+  cf_info_title: "Επικοινωνήστε άμεσα",
+  cf_info_sub: "Προτιμάτε να μιλήσουμε; Είμαστε ένα άγγιγμα μακριά.",
 };
 
 const dicts: Record<Lang, Dict> = { en, ru, el };

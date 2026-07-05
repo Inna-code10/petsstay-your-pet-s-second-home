@@ -223,8 +223,18 @@ const en: Dict = {
   cf_success: "Thank you! Your message has been sent successfully.",
   cf_err_required: "This field is required.",
   cf_err_email: "Please enter a valid email address.",
+  cf_err_phone: "Please enter a valid phone number.",
+  cf_error: "Something went wrong. Please try again.",
   cf_info_title: "Reach us directly",
   cf_info_sub: "Prefer to talk? We're one tap away.",
+  book_email: "Email",
+  book_email_ph: "you@email.com",
+  book_submitting: "Sending…",
+  book_error: "Booking failed. Please try again.",
+  book_err_required: "Please fill in all required fields.",
+  book_err_email: "Please enter a valid email address.",
+  book_err_phone: "Please enter a valid phone number.",
+  book_err_dates: "Departure must be after arrival.",
 };
 
 const ru: Dict = {

@@ -1071,14 +1071,15 @@ type ContactFormValues = {
 
 const EMPTY_CONTACT: ContactFormValues = { name: "", email: "", phone: "", subject: "", message: "" };
 
-// TODO(Stage 2): replace this stub with a real API call (e.g. POST to /api/contact
-// or a Lovable Cloud server function). Keep the same signature so the UI stays untouched.
 async function submitContactMessage(values: ContactFormValues): Promise<void> {
-  // Simulate network latency for the UX loading state.
-  await new Promise((resolve) => setTimeout(resolve, 900));
-  if (typeof console !== "undefined") {
-    console.info("[ContactForm] pending backend integration", values);
-  }
+  const { createContactMessage } = await import("@/lib/services");
+  await createContactMessage({
+    full_name: values.name,
+    email: values.email,
+    phone: values.phone || null,
+    subject: values.subject || null,
+    message: values.message,
+  });
 }
 
 function ContactForm() {

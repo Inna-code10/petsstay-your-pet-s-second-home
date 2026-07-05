@@ -223,8 +223,18 @@ const en: Dict = {
   cf_success: "Thank you! Your message has been sent successfully.",
   cf_err_required: "This field is required.",
   cf_err_email: "Please enter a valid email address.",
+  cf_err_phone: "Please enter a valid phone number.",
+  cf_error: "Something went wrong. Please try again.",
   cf_info_title: "Reach us directly",
   cf_info_sub: "Prefer to talk? We're one tap away.",
+  book_email: "Email",
+  book_email_ph: "you@email.com",
+  book_submitting: "Sending…",
+  book_error: "Booking failed. Please try again.",
+  book_err_required: "Please fill in all required fields.",
+  book_err_email: "Please enter a valid email address.",
+  book_err_phone: "Please enter a valid phone number.",
+  book_err_dates: "Departure must be after arrival.",
 };
 
 const ru: Dict = {
@@ -446,8 +456,18 @@ const ru: Dict = {
   cf_success: "Спасибо! Ваше сообщение успешно отправлено.",
   cf_err_required: "Это поле обязательно.",
   cf_err_email: "Введите корректный адрес электронной почты.",
+  cf_err_phone: "Введите корректный номер телефона.",
+  cf_error: "Что-то пошло не так. Попробуйте ещё раз.",
   cf_info_title: "Связаться напрямую",
   cf_info_sub: "Хотите поговорить? Мы на связи.",
+  book_email: "Эл. почта",
+  book_email_ph: "you@email.com",
+  book_submitting: "Отправка…",
+  book_error: "Не удалось отправить заявку. Попробуйте снова.",
+  book_err_required: "Заполните все обязательные поля.",
+  book_err_email: "Введите корректный адрес электронной почты.",
+  book_err_phone: "Введите корректный номер телефона.",
+  book_err_dates: "Дата выезда должна быть позже даты заезда.",
 };
 
 const el: Dict = {
@@ -669,8 +689,18 @@ const el: Dict = {
   cf_success: "Ευχαριστούμε! Το μήνυμά σας στάλθηκε με επιτυχία.",
   cf_err_required: "Αυτό το πεδίο είναι υποχρεωτικό.",
   cf_err_email: "Παρακαλώ εισάγετε ένα έγκυρο email.",
+  cf_err_phone: "Παρακαλώ εισάγετε έγκυρο τηλέφωνο.",
+  cf_error: "Κάτι πήγε στραβά. Δοκιμάστε ξανά.",
   cf_info_title: "Επικοινωνήστε άμεσα",
   cf_info_sub: "Προτιμάτε να μιλήσουμε; Είμαστε ένα άγγιγμα μακριά.",
+  book_email: "Email",
+  book_email_ph: "you@email.com",
+  book_submitting: "Αποστολή…",
+  book_error: "Η κράτηση απέτυχε. Δοκιμάστε ξανά.",
+  book_err_required: "Συμπληρώστε όλα τα υποχρεωτικά πεδία.",
+  book_err_email: "Παρακαλώ εισάγετε ένα έγκυρο email.",
+  book_err_phone: "Παρακαλώ εισάγετε έγκυρο τηλέφωνο.",
+  book_err_dates: "Η αναχώρηση πρέπει να είναι μετά την άφιξη.",
 };
 
 const dicts: Record<Lang, Dict> = { en, ru, el };

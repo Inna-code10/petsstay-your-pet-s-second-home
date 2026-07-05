@@ -337,16 +337,53 @@ function Hero() {
 function BookingForm() {
   const { t } = useI18n();
   const [pet, setPet] = useState<"dog" | "cat">("dog");
-  const [submitted, setSubmitted] = useState(false);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [arrival, setArrival] = useState("");
+  const [departure, setDeparture] = useState("");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string>("");
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setErrorMsg("");
+    // basic validation
+    if (!name.trim() || !phone.trim() || !email.trim() || !arrival || !departure) {
+      setStatus("error"); setErrorMsg(t("book_err_required")); return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setStatus("error"); setErrorMsg(t("book_err_email")); return;
+    }
+    if (!/^[+\d][\d\s\-()]{5,}$/.test(phone.trim())) {
+      setStatus("error"); setErrorMsg(t("book_err_phone")); return;
+    }
+    if (arrival > departure) {
+      setStatus("error"); setErrorMsg(t("book_err_dates")); return;
+    }
+    setStatus("submitting");
+    try {
+      const { createBooking } = await import("@/lib/services");
+      await createBooking({
+        owner_name: name, phone, email, pet_type: pet,
+        arrival_date: arrival, departure_date: departure,
+      });
+      setStatus("success");
+      setName(""); setPhone(""); setEmail(""); setArrival(""); setDeparture("");
+      setTimeout(() => setStatus("idle"), 4000);
+    } catch (err) {
+      console.error("[BookingForm]", err);
+      setStatus("error");
+      setErrorMsg(t("book_error"));
+    }
+  }
+
+  const busy = status === "submitting";
 
   return (
     <div id="book" className="relative mt-12 md:mt-16">
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          setSubmitted(true);
-          setTimeout(() => setSubmitted(false), 3500);
-        }}
+        onSubmit={onSubmit}
         className="glass rounded-[28px] p-4 sm:p-6 md:p-7 shadow-[var(--shadow-card)] border border-white/60 grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 items-end"
       >
         <div className="md:col-span-12 lg:col-span-3 flex items-center gap-3">
@@ -360,12 +397,15 @@ function BookingForm() {
         </div>
 
         <Field label={t("book_name")} className="md:col-span-6 lg:col-span-2">
-          <input required placeholder={t("book_name_ph")} className="input-base" />
+          <input required placeholder={t("book_name_ph")} className="input-base" value={name} onChange={(e) => setName(e.target.value)} disabled={busy} />
         </Field>
         <Field label={t("book_phone")} className="md:col-span-6 lg:col-span-2">
-          <input required type="tel" placeholder={t("book_phone_ph")} className="input-base" />
+          <input required type="tel" placeholder={t("book_phone_ph")} className="input-base" value={phone} onChange={(e) => setPhone(e.target.value)} disabled={busy} />
         </Field>
-        <Field label={t("book_pet")} className="md:col-span-4 lg:col-span-1">
+        <Field label={t("book_email")} className="md:col-span-6 lg:col-span-2">
+          <input required type="email" placeholder={t("book_email_ph")} className="input-base" value={email} onChange={(e) => setEmail(e.target.value)} disabled={busy} />
+        </Field>
+        <Field label={t("book_pet")} className="md:col-span-6 lg:col-span-1">
           <div className="flex rounded-full bg-cream p-1 h-[46px]">
             {(["dog", "cat"] as const).map((p) => (
               <button
@@ -381,22 +421,29 @@ function BookingForm() {
             ))}
           </div>
         </Field>
-        <Field label={t("book_arrival")} className="md:col-span-4 lg:col-span-2">
-          <input required type="date" className="input-base" />
+        <Field label={t("book_arrival")} className="md:col-span-6 lg:col-span-1">
+          <input required type="date" className="input-base" value={arrival} onChange={(e) => setArrival(e.target.value)} disabled={busy} />
         </Field>
-        <Field label={t("book_departure")} className="md:col-span-4 lg:col-span-1">
-          <input required type="date" className="input-base" />
+        <Field label={t("book_departure")} className="md:col-span-6 lg:col-span-1">
+          <input required type="date" className="input-base" value={departure} onChange={(e) => setDeparture(e.target.value)} disabled={busy} />
         </Field>
 
-        <div className="md:col-span-12 lg:col-span-1">
-          <button type="submit" className="btn-hero w-full inline-flex items-center justify-center gap-2 rounded-full h-[46px] px-4 text-sm font-bold">
-            {submitted ? <Check className="h-5 w-5" /> : <>{t("book_submit")}</>}
+        <div className="md:col-span-12 lg:col-span-12 flex flex-col sm:flex-row sm:items-center gap-3">
+          <button type="submit" disabled={busy} className="btn-hero inline-flex items-center justify-center gap-2 rounded-full h-[46px] px-5 text-sm font-bold disabled:opacity-70 w-full sm:w-auto">
+            {busy ? (
+              <><span className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />{t("book_submitting")}</>
+            ) : status === "success" ? (
+              <><Check className="h-5 w-5" />{t("book_success")}</>
+            ) : (
+              <>{t("book_submit")}</>
+            )}
           </button>
+          <div aria-live="polite" className="text-sm font-semibold">
+            {status === "success" && <span className="text-accent">{t("book_success")}</span>}
+            {status === "error" && <span className="text-destructive">{errorMsg}</span>}
+          </div>
         </div>
       </form>
-      {submitted && (
-        <div className="mt-3 text-center text-sm font-semibold text-accent animate-fade-up">{t("book_success")}</div>
-      )}
       <style>{`
         .input-base {
           height: 46px;
@@ -412,6 +459,7 @@ function BookingForm() {
           transition: border-color .2s, box-shadow .2s;
         }
         .input-base:focus { border-color: var(--primary); box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 20%, transparent); }
+        .input-base:disabled { opacity: .7; cursor: not-allowed; }
       `}</style>
     </div>
   );
@@ -1023,21 +1071,23 @@ type ContactFormValues = {
 
 const EMPTY_CONTACT: ContactFormValues = { name: "", email: "", phone: "", subject: "", message: "" };
 
-// TODO(Stage 2): replace this stub with a real API call (e.g. POST to /api/contact
-// or a Lovable Cloud server function). Keep the same signature so the UI stays untouched.
 async function submitContactMessage(values: ContactFormValues): Promise<void> {
-  // Simulate network latency for the UX loading state.
-  await new Promise((resolve) => setTimeout(resolve, 900));
-  if (typeof console !== "undefined") {
-    console.info("[ContactForm] pending backend integration", values);
-  }
+  const { createContactMessage } = await import("@/lib/services");
+  await createContactMessage({
+    full_name: values.name,
+    email: values.email,
+    phone: values.phone || null,
+    subject: values.subject || null,
+    message: values.message,
+  });
 }
 
 function ContactForm() {
   const { t } = useI18n();
   const [values, setValues] = useState<ContactFormValues>(EMPTY_CONTACT);
   const [errors, setErrors] = useState<Partial<Record<keyof ContactFormValues, string>>>({});
-  const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   function validate(v: ContactFormValues) {
     const next: Partial<Record<keyof ContactFormValues, string>> = {};
@@ -1046,13 +1096,14 @@ function ContactForm() {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim())) next.email = t("cf_err_email");
     if (!v.subject.trim()) next.subject = t("cf_err_required");
     if (!v.message.trim()) next.message = t("cf_err_required");
+    if (v.phone.trim() && !/^[+\d][\d\s\-()]{5,}$/.test(v.phone.trim())) next.phone = t("cf_err_phone");
     return next;
   }
 
   function update<K extends keyof ContactFormValues>(key: K, value: string) {
     setValues((prev) => ({ ...prev, [key]: value }));
     if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
-    if (status === "success") setStatus("idle");
+    if (status === "success" || status === "error") setStatus("idle");
   }
 
   async function onSubmit(e: React.FormEvent) {
@@ -1061,12 +1112,15 @@ function ContactForm() {
     setErrors(next);
     if (Object.keys(next).length > 0) return;
     setStatus("submitting");
+    setErrorMsg("");
     try {
       await submitContactMessage(values);
       setStatus("success");
       setValues(EMPTY_CONTACT);
-    } catch {
-      setStatus("idle");
+    } catch (err) {
+      console.error("[ContactForm]", err);
+      setStatus("error");
+      setErrorMsg(t("cf_error"));
     }
   }
 
@@ -1179,6 +1233,11 @@ function ContactForm() {
             {status === "success" && (
               <span className="inline-flex items-center gap-2 text-accent animate-fade-up">
                 <Check className="h-4 w-4" /> {t("cf_success")}
+              </span>
+            )}
+            {status === "error" && (
+              <span className="inline-flex items-center gap-2 text-destructive animate-fade-up">
+                {errorMsg}
               </span>
             )}
           </div>

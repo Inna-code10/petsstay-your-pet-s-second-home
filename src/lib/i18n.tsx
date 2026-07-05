@@ -689,8 +689,18 @@ const el: Dict = {
   cf_success: "Ευχαριστούμε! Το μήνυμά σας στάλθηκε με επιτυχία.",
   cf_err_required: "Αυτό το πεδίο είναι υποχρεωτικό.",
   cf_err_email: "Παρακαλώ εισάγετε ένα έγκυρο email.",
+  cf_err_phone: "Παρακαλώ εισάγετε έγκυρο τηλέφωνο.",
+  cf_error: "Κάτι πήγε στραβά. Δοκιμάστε ξανά.",
   cf_info_title: "Επικοινωνήστε άμεσα",
   cf_info_sub: "Προτιμάτε να μιλήσουμε; Είμαστε ένα άγγιγμα μακριά.",
+  book_email: "Email",
+  book_email_ph: "you@email.com",
+  book_submitting: "Αποστολή…",
+  book_error: "Η κράτηση απέτυχε. Δοκιμάστε ξανά.",
+  book_err_required: "Συμπληρώστε όλα τα υποχρεωτικά πεδία.",
+  book_err_email: "Παρακαλώ εισάγετε ένα έγκυρο email.",
+  book_err_phone: "Παρακαλώ εισάγετε έγκυρο τηλέφωνο.",
+  book_err_dates: "Η αναχώρηση πρέπει να είναι μετά την άφιξη.",
 };
 
 const dicts: Record<Lang, Dict> = { en, ru, el };

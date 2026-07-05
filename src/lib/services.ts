@@ -76,13 +76,9 @@ export async function createBooking(input: BookingInput) {
     message: input.message ? sanitize(input.message) : null,
   };
 
-  const { data, error } = await supabase
-    .from("bookings")
-    .insert(payload)
-    .select("id")
-    .single();
+  const { error } = await supabase.from("bookings").insert(payload);
   if (error) throw error;
-  return data;
+  return { ok: true };
 }
 
 export async function createContactMessage(input: ContactInput) {

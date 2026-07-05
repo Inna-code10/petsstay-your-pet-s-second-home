@@ -1086,7 +1086,8 @@ function ContactForm() {
   const { t } = useI18n();
   const [values, setValues] = useState<ContactFormValues>(EMPTY_CONTACT);
   const [errors, setErrors] = useState<Partial<Record<keyof ContactFormValues, string>>>({});
-  const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   function validate(v: ContactFormValues) {
     const next: Partial<Record<keyof ContactFormValues, string>> = {};
@@ -1095,13 +1096,14 @@ function ContactForm() {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim())) next.email = t("cf_err_email");
     if (!v.subject.trim()) next.subject = t("cf_err_required");
     if (!v.message.trim()) next.message = t("cf_err_required");
+    if (v.phone.trim() && !/^[+\d][\d\s\-()]{5,}$/.test(v.phone.trim())) next.phone = t("cf_err_phone");
     return next;
   }
 
   function update<K extends keyof ContactFormValues>(key: K, value: string) {
     setValues((prev) => ({ ...prev, [key]: value }));
     if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
-    if (status === "success") setStatus("idle");
+    if (status === "success" || status === "error") setStatus("idle");
   }
 
   async function onSubmit(e: React.FormEvent) {
@@ -1110,12 +1112,15 @@ function ContactForm() {
     setErrors(next);
     if (Object.keys(next).length > 0) return;
     setStatus("submitting");
+    setErrorMsg("");
     try {
       await submitContactMessage(values);
       setStatus("success");
       setValues(EMPTY_CONTACT);
-    } catch {
-      setStatus("idle");
+    } catch (err) {
+      console.error("[ContactForm]", err);
+      setStatus("error");
+      setErrorMsg(t("cf_error"));
     }
   }
 

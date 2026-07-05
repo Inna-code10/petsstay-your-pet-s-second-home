@@ -1235,6 +1235,11 @@ function ContactForm() {
                 <Check className="h-4 w-4" /> {t("cf_success")}
               </span>
             )}
+            {status === "error" && (
+              <span className="inline-flex items-center gap-2 text-destructive animate-fade-up">
+                {errorMsg}
+              </span>
+            )}
           </div>
         </div>
       </form>

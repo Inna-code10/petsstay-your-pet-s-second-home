@@ -93,13 +93,9 @@ export async function createContactMessage(input: ContactInput) {
     message: sanitize(input.message),
   };
 
-  const { data, error } = await supabase
-    .from("contacts")
-    .insert(payload)
-    .select("id")
-    .single();
+  const { error } = await supabase.from("contacts").insert(payload);
   if (error) throw error;
-  return data;
+  return { ok: true };
 }
 
 /* --------------------------- Queries (staff/admin) --------------------------- */

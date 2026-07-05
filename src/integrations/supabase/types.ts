@@ -14,16 +14,240 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          additional_services: Json
+          arrival_date: string
+          created_at: string
+          departure_date: string
+          email: string
+          id: string
+          message: string | null
+          number_of_pets: number
+          owner_name: string
+          pet_type: string
+          phone: string
+          status: Database["public"]["Enums"]["booking_status"]
+          total_price: number | null
+        }
+        Insert: {
+          additional_services?: Json
+          arrival_date: string
+          created_at?: string
+          departure_date: string
+          email: string
+          id?: string
+          message?: string | null
+          number_of_pets?: number
+          owner_name: string
+          pet_type: string
+          phone: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          total_price?: number | null
+        }
+        Update: {
+          additional_services?: Json
+          arrival_date?: string
+          created_at?: string
+          departure_date?: string
+          email?: string
+          id?: string
+          message?: string | null
+          number_of_pets?: number
+          owner_name?: string
+          pet_type?: string
+          phone?: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          total_price?: number | null
+        }
+        Relationships: []
+      }
+      contacts: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          message: string
+          phone: string | null
+          status: Database["public"]["Enums"]["contact_status"]
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          message: string
+          phone?: string | null
+          status?: Database["public"]["Enums"]["contact_status"]
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          message?: string
+          phone?: string | null
+          status?: Database["public"]["Enums"]["contact_status"]
+          subject?: string | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          status: Database["public"]["Enums"]["notification_status"]
+          title: string
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          status?: Database["public"]["Enums"]["notification_status"]
+          title: string
+          type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          status?: Database["public"]["Enums"]["notification_status"]
+          title?: string
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      pets: {
+        Row: {
+          age: number | null
+          allergies: string | null
+          behavior_notes: string | null
+          breed: string | null
+          created_at: string
+          emergency_contact: string | null
+          feeding_schedule: string | null
+          gender: string | null
+          id: string
+          medical_notes: string | null
+          pet_name: string
+          pet_type: string
+          photo_url: string | null
+          user_id: string
+          vaccination_status: string | null
+          weight: number | null
+        }
+        Insert: {
+          age?: number | null
+          allergies?: string | null
+          behavior_notes?: string | null
+          breed?: string | null
+          created_at?: string
+          emergency_contact?: string | null
+          feeding_schedule?: string | null
+          gender?: string | null
+          id?: string
+          medical_notes?: string | null
+          pet_name: string
+          pet_type: string
+          photo_url?: string | null
+          user_id: string
+          vaccination_status?: string | null
+          weight?: number | null
+        }
+        Update: {
+          age?: number | null
+          allergies?: string | null
+          behavior_notes?: string | null
+          breed?: string | null
+          created_at?: string
+          emergency_contact?: string | null
+          feeding_schedule?: string | null
+          gender?: string | null
+          id?: string
+          medical_notes?: string | null
+          pet_name?: string
+          pet_type?: string
+          photo_url?: string | null
+          user_id?: string
+          vaccination_status?: string | null
+          weight?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "client" | "staff" | "admin"
+      booking_status: "new" | "confirmed" | "cancelled" | "completed"
+      contact_status: "new" | "read" | "archived"
+      notification_status: "pending" | "sent" | "failed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +374,11 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["client", "staff", "admin"],
+      booking_status: ["new", "confirmed", "cancelled", "completed"],
+      contact_status: ["new", "read", "archived"],
+      notification_status: ["pending", "sent", "failed"],
+    },
   },
 } as const

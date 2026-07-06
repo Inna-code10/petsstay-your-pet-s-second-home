@@ -1,5 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { LogOut, LayoutDashboard, UserPlus, LogIn } from "lucide-react";
 import {
   Menu,
   X,
@@ -147,13 +149,7 @@ function Header() {
 
           <div className="flex items-center gap-2">
             <LangSwitcher lang={lang} setLang={setLang} />
-            <a
-              href="#book"
-              className="hidden sm:inline-flex btn-hero items-center gap-2 rounded-full px-4 md:px-5 py-2.5 text-sm font-semibold"
-            >
-              {t("cta_book")}
-              <ArrowRight className="h-4 w-4" />
-            </a>
+            <AuthNav />
             <button
               onClick={() => setOpen((o) => !o)}
               className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-white"
@@ -177,18 +173,117 @@ function Header() {
                   {t(n.key)}
                 </a>
               ))}
-              <a
-                href="#book"
-                onClick={() => setOpen(false)}
-                className="mt-2 btn-hero flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-base font-semibold"
-              >
-                {t("cta_book")} <ArrowRight className="h-4 w-4" />
-              </a>
+              <MobileAuthNav onNavigate={() => setOpen(false)} />
             </div>
           </div>
         )}
       </div>
     </header>
+  );
+}
+
+function AuthNav() {
+  const { user, role, fullName, signOut, loading } = useAuth();
+  const { t } = useI18n();
+  const navigate = useNavigate();
+  if (loading) return null;
+  if (!user) {
+    return (
+      <>
+        <Link
+          to="/login"
+          className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-border bg-white px-3.5 py-2 text-sm font-semibold hover:bg-cream"
+        >
+          <LogIn className="h-4 w-4" /> {t("auth_login_btn")}
+        </Link>
+        <a
+          href="#book"
+          className="hidden sm:inline-flex btn-hero items-center gap-2 rounded-full px-4 md:px-5 py-2.5 text-sm font-semibold"
+        >
+          {t("cta_book")} <ArrowRight className="h-4 w-4" />
+        </a>
+      </>
+    );
+  }
+  const dashTo = role === "admin" ? "/admin" : role === "staff" ? "/staff" : "/dashboard";
+  return (
+    <>
+      {fullName && (
+        <span className="hidden md:inline text-sm font-medium text-foreground/70 mr-1">
+          {fullName.split(" ")[0]}
+        </span>
+      )}
+      <Link
+        to={dashTo}
+        className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-foreground text-background px-3.5 py-2 text-sm font-semibold"
+      >
+        <LayoutDashboard className="h-4 w-4" /> {t("auth_dashboard")}
+      </Link>
+      <button
+        onClick={async () => {
+          await signOut();
+          navigate({ to: "/" });
+        }}
+        className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-border bg-white px-3.5 py-2 text-sm font-semibold hover:bg-cream"
+      >
+        <LogOut className="h-4 w-4" /> {t("auth_logout")}
+      </button>
+    </>
+  );
+}
+
+function MobileAuthNav({ onNavigate }: { onNavigate: () => void }) {
+  const { user, role, signOut } = useAuth();
+  const { t } = useI18n();
+  const navigate = useNavigate();
+  if (!user) {
+    return (
+      <>
+        <Link
+          to="/login"
+          onClick={onNavigate}
+          className="mt-2 flex items-center justify-center gap-2 rounded-2xl border border-border bg-white px-4 py-3 text-base font-semibold"
+        >
+          <LogIn className="h-4 w-4" /> {t("auth_login_btn")}
+        </Link>
+        <Link
+          to="/register"
+          onClick={onNavigate}
+          className="mt-2 flex items-center justify-center gap-2 rounded-2xl border border-border bg-white px-4 py-3 text-base font-semibold"
+        >
+          <UserPlus className="h-4 w-4" /> {t("auth_register_btn")}
+        </Link>
+        <a
+          href="#book"
+          onClick={onNavigate}
+          className="mt-2 btn-hero flex items-center justify-center gap-2 rounded-2xl px-4 py-3 text-base font-semibold"
+        >
+          {t("cta_book")} <ArrowRight className="h-4 w-4" />
+        </a>
+      </>
+    );
+  }
+  const dashTo = role === "admin" ? "/admin" : role === "staff" ? "/staff" : "/dashboard";
+  return (
+    <>
+      <Link
+        to={dashTo}
+        onClick={onNavigate}
+        className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-foreground text-background px-4 py-3 text-base font-semibold"
+      >
+        <LayoutDashboard className="h-4 w-4" /> {t("auth_dashboard")}
+      </Link>
+      <button
+        onClick={async () => {
+          await signOut();
+          onNavigate();
+          navigate({ to: "/" });
+        }}
+        className="mt-2 flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-white px-4 py-3 text-base font-semibold"
+      >
+        <LogOut className="h-4 w-4" /> {t("auth_logout")}
+      </button>
+    </>
   );
 }
 

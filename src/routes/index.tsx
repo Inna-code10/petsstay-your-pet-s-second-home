@@ -1,5 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { LogOut, LayoutDashboard, UserPlus, LogIn } from "lucide-react";
 import {
   Menu,
   X,

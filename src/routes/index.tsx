@@ -517,10 +517,27 @@ function BookingForm() {
           </div>
         </Field>
         <Field label={t("book_arrival")} className="md:col-span-6 lg:col-span-1">
-          <input required type="date" className="input-base" value={arrival} onChange={(e) => setArrival(e.target.value)} disabled={busy} />
+          <DateField
+            required
+            value={arrival}
+            onChange={(v) => {
+              setArrival(v);
+              if (departure && v && departure < v) setDeparture("");
+            }}
+            min={new Date().toISOString().slice(0, 10)}
+            disabled={busy}
+            ariaLabel={t("book_arrival")}
+          />
         </Field>
         <Field label={t("book_departure")} className="md:col-span-6 lg:col-span-1">
-          <input required type="date" className="input-base" value={departure} onChange={(e) => setDeparture(e.target.value)} disabled={busy} />
+          <DateField
+            required
+            value={departure}
+            onChange={setDeparture}
+            min={arrival || new Date().toISOString().slice(0, 10)}
+            disabled={busy}
+            ariaLabel={t("book_departure")}
+          />
         </Field>
 
         <div className="md:col-span-12 lg:col-span-12 flex flex-col sm:flex-row sm:items-center gap-3">

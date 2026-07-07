@@ -1134,8 +1134,8 @@ function Location() {
 
           {/* RIGHT: Info + map */}
           <div className="lg:col-span-5 order-1 lg:order-2 space-y-6">
-            <div className="rounded-[28px] overflow-hidden bg-white border border-border shadow-[var(--shadow-card)]">
-              <img src={location} alt="PetSStay entrance in Limassol" loading="lazy" width={1200} height={900} className="w-full h-56 md:h-80 lg:h-56 object-cover object-center md:object-bottom lg:object-center" />
+            <div className="rounded-[28px] overflow-hidden bg-cream border border-border shadow-[var(--shadow-card)]">
+              <img src={location} alt="PetSStay entrance in Limassol" loading="lazy" width={1200} height={900} className="w-full h-56 object-cover object-center md:h-auto md:object-contain lg:h-56 lg:object-cover" />
               <div className="p-6 md:p-7 space-y-4">
                 <div>
                   <div className="text-[11px] font-bold uppercase tracking-wider text-primary">{t("cf_info_title")}</div>

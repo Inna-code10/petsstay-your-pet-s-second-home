@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 
 import { useI18n, type Lang } from "@/lib/i18n";
+import { DateField } from "@/components/DateField";
 import hero from "@/assets/hero.jpg";
 import g1 from "@/assets/gallery-1.jpg";
 import g2 from "@/assets/gallery-2.jpg";

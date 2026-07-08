@@ -335,6 +335,18 @@ const en: Dict = {
   pet_err_age: "Please enter a valid age.",
   pet_err_weight: "Please enter a valid weight.",
   pet_err_url: "Please enter a valid URL (https://…).",
+
+  book_select_pet: "Select a saved pet",
+  book_select_pet_none: "— Enter manually —",
+  book_no_pets_hint: "Save your pets to book faster.",
+  book_add_pet_profile: "Add pet profile",
+  book_stay_duration: "Stay duration",
+  book_nights_one: "night",
+  book_nights_many: "nights",
+  book_err_past: "Date cannot be in the past.",
+  dash_upcoming: "Upcoming bookings",
+  dash_no_upcoming: "No upcoming bookings.",
+  dash_calendar: "Calendar",
 };
 
 const ru: Dict = {

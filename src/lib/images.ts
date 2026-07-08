@@ -22,14 +22,27 @@ const unsplash = (id: string, w = 1600, q = 80) =>
 /** Hero: warm interaction between a person and a dog. */
 export const heroImage = unsplash("photo-1450778869180-41d0601e046e", 1800);
 
-/** Gallery: cats, dogs, walks, care, cozy rest. */
+/**
+ * Gallery: "A day at PetSStay" — exactly 3 cats + 3 dogs, distributed
+ * across the grid to tell the story of a normal day of premium care
+ * (affection, outdoor play, indoor rest, daily care, human interaction).
+ *
+ * Slots 0 and 4 are tall (row-span-2) → portrait-oriented photos.
+ * Slots 1, 2, 3, 5 are standard cells → landscape-oriented photos.
+ */
 export const galleryImages: { src: string; alt: string; span?: string; position?: string }[] = [
-  { src: unsplash("photo-1526336024174-e58f5cdd8e13", 1200), alt: "Relaxed cat resting in a cozy bright interior", span: "row-span-2", position: "object-center" },
-  { src: unsplash("photo-1573865526739-10659fec78a5", 900), alt: "Close-up of a friendly, healthy cat", span: "", position: "object-center" },
-  { src: unsplash("photo-1592194996308-7b43878e84a6", 900), alt: "Person gently holding and caring for a cat", span: "", position: "object-center" },
-  { src: unsplash("photo-1583337130417-3346a1be7dee", 900), alt: "Caregiver feeding a dog", span: "" },
-  { src: unsplash("photo-1548199973-03cce0bbc87b", 1200), alt: "Person walking a dog outdoors in the sun", span: "row-span-2" },
-  { src: unsplash("photo-1425082661705-1834bfd09dca", 900), alt: "Puppy sleeping peacefully", span: "" },
+  // 0 — CAT + person (portrait, tall slot)
+  { src: unsplash("photo-1592194996308-7b43878e84a6", 1200), alt: "Person gently holding and petting a calm cat indoors", span: "row-span-2", position: "object-center" },
+  // 1 — DOG outdoor play (landscape)
+  { src: unsplash("photo-1587300003388-59208cc962cb", 900), alt: "Happy dog running and playing outdoors in warm daylight", span: "", position: "object-center" },
+  // 2 — CAT relaxing indoors (landscape)
+  { src: unsplash("photo-1526336024174-e58f5cdd8e13", 900), alt: "Relaxed cat resting in a cozy bright interior", span: "", position: "object-center" },
+  // 3 — DOG enjoying indoor comfort (landscape)
+  { src: unsplash("photo-1477884213360-7e9d7dcc1e48", 900), alt: "Content dog relaxing comfortably indoors", span: "", position: "object-center" },
+  // 4 — CAT during feeding / daily care (portrait, tall slot)
+  { src: unsplash("photo-1574158622682-e40e69881006", 1200), alt: "Healthy cat during daily care at feeding time", span: "row-span-2", position: "object-center" },
+  // 5 — DOG + person (landscape)
+  { src: unsplash("photo-1583337130417-3346a1be7dee", 900), alt: "Pet sitter warmly interacting with a happy dog", span: "", position: "object-center" },
 ];
 
 /** Team portraits — demo stock photos, replace with real staff photos later. */

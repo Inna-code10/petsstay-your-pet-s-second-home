@@ -45,11 +45,14 @@ export const galleryImages: { src: string; alt: string; span?: string; position?
   { src: unsplash("photo-1686807252495-98890c1fc8b8", 900), alt: "Pet sitter affectionately petting a happy dog outdoors", span: "", position: "object-center" },
 ];
 
-/** Team portraits — demo stock photos, replace with real staff photos later. */
+/** Team portraits — authentic Unsplash portraits (2 women, 1 man). */
 export const teamPhotos = {
-  member1: unsplash("photo-1573496359142-b8d87734a5a2", 800),
-  member2: unsplash("photo-1580489944761-15a19d654956", 800),
-  member3: unsplash("photo-1438761681033-6461ffad8d80", 800),
+  // Maria Ioannou — Founder & Head Caretaker (woman, 30s, confident & warm)
+  member1: unsplash("photo-1609708993734-29d07306bdc7", 800),
+  // Andreas Petrou — Resident Veterinarian (man, 30s, kind & approachable)
+  member2: unsplash("photo-1758874383973-83166565759c", 800),
+  // Elena Georgiou — Senior Pet Sitter (woman, late 20s, gentle & natural)
+  member3: unsplash("photo-1760552069335-07d43ca826f4", 800),
 };
 
 

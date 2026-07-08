@@ -1,9 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { format, parseISO } from "date-fns";
+import { CalendarDays } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { ProtectedShell } from "@/components/DashboardShell";
-import { getMyBookings } from "@/lib/services";
+import { getMyBookings, getBookingCalendarEvents } from "@/lib/services";
 import { MyPets } from "@/components/MyPets";
+import { Calendar } from "@/components/ui/calendar";
 
 export const Route = createFileRoute("/dashboard")({
   ssr: false,
@@ -20,13 +23,119 @@ type Booking = {
   created_at: string;
 };
 
+type CalendarEvent = {
+  id: string;
+  pet_type: string;
+  arrival_date: string;
+  departure_date: string;
+  status: string;
+};
+
 function DashboardPage() {
   const { t } = useI18n();
   return (
     <ProtectedShell requireRole="client" title={t("dash_client_title")} intro={t("dash_client_intro")}>
-      <MyBookings />
+      <UpcomingBookings />
+      <div className="mt-12">
+        <MyBookings />
+      </div>
       <MyPets />
     </ProtectedShell>
+  );
+}
+
+function fmt(iso: string) {
+  try { return format(parseISO(iso), "dd/MM/yyyy"); } catch { return iso; }
+}
+
+function UpcomingBookings() {
+  const { t } = useI18n();
+  const [events, setEvents] = useState<CalendarEvent[] | null>(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const rows = await getBookingCalendarEvents();
+        if (!cancelled) setEvents(rows as CalendarEvent[]);
+      } catch (e) {
+        console.error("[UpcomingBookings]", e);
+        if (!cancelled) setError(t("dash_bookings_error"));
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [t]);
+
+  const bookedDates = useMemo(() => {
+    if (!events) return [] as Date[];
+    const set = new Set<string>();
+    for (const e of events) {
+      const a = parseISO(e.arrival_date);
+      const d = parseISO(e.departure_date);
+      for (let cur = new Date(a); cur <= d; cur.setDate(cur.getDate() + 1)) {
+        set.add(cur.toISOString().slice(0, 10));
+      }
+    }
+    return Array.from(set).map((s) => parseISO(s));
+  }, [events]);
+
+  const statusLabel = (s: string) => {
+    const key = `booking_status_${s}` as const;
+    const v = t(key);
+    return v === key ? s : v;
+  };
+
+  return (
+    <section>
+      <div className="flex items-center gap-2">
+        <CalendarDays className="h-5 w-5 text-accent" />
+        <h2 className="text-xl md:text-2xl font-extrabold tracking-tight">{t("dash_upcoming")}</h2>
+      </div>
+
+      {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
+      {!error && events === null && (
+        <p className="mt-4 text-sm text-muted-foreground">{t("dash_loading")}</p>
+      )}
+
+      {!error && events !== null && (
+        <div className="mt-4 grid gap-6 md:grid-cols-2">
+          <div className="rounded-2xl border border-border bg-white p-3 shadow-sm inline-block">
+            <Calendar
+              mode="multiple"
+              selected={bookedDates}
+              onSelect={() => { /* read-only preview */ }}
+              className="p-3 pointer-events-auto"
+            />
+            <p className="px-3 pb-2 text-xs text-muted-foreground">{t("dash_calendar")}</p>
+          </div>
+
+          <div>
+            {events.length === 0 ? (
+              <p className="text-sm text-muted-foreground">{t("dash_no_upcoming")}</p>
+            ) : (
+              <ul className="space-y-3">
+                {events.map((b) => (
+                  <li key={b.id} className="rounded-2xl border border-border bg-white p-4 shadow-sm">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="font-semibold capitalize">
+                        {b.pet_type === "dog" ? t("book_dog") : b.pet_type === "cat" ? t("book_cat") : b.pet_type}
+                      </div>
+                      <span className="inline-flex items-center rounded-full bg-cream px-2.5 py-1 text-xs font-semibold">
+                        {statusLabel(b.status)}
+                      </span>
+                    </div>
+                    <div className="mt-2 text-sm text-muted-foreground">
+                      {fmt(b.arrival_date)} → {fmt(b.departure_date)}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -96,8 +205,8 @@ function MyBookings() {
               {bookings.map((b) => (
                 <tr key={b.id} className="border-b border-border/60">
                   <td className="py-3 pr-4 font-semibold capitalize">{b.pet_type}</td>
-                  <td className="py-3 pr-4">{b.arrival_date}</td>
-                  <td className="py-3 pr-4">{b.departure_date}</td>
+                  <td className="py-3 pr-4">{fmt(b.arrival_date)}</td>
+                  <td className="py-3 pr-4">{fmt(b.departure_date)}</td>
                   <td className="py-3 pr-4">{b.total_price != null ? `€${b.total_price}` : "—"}</td>
                   <td className="py-3 pr-4">
                     <span className="inline-flex items-center rounded-full bg-cream px-2.5 py-1 text-xs font-semibold">

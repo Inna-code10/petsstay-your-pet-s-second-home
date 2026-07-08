@@ -335,6 +335,18 @@ const en: Dict = {
   pet_err_age: "Please enter a valid age.",
   pet_err_weight: "Please enter a valid weight.",
   pet_err_url: "Please enter a valid URL (https://…).",
+
+  book_select_pet: "Select a saved pet",
+  book_select_pet_none: "— Enter manually —",
+  book_no_pets_hint: "Save your pets to book faster.",
+  book_add_pet_profile: "Add pet profile",
+  book_stay_duration: "Stay duration",
+  book_nights_one: "night",
+  book_nights_many: "nights",
+  book_err_past: "Date cannot be in the past.",
+  dash_upcoming: "Upcoming bookings",
+  dash_no_upcoming: "No upcoming bookings.",
+  dash_calendar: "Calendar",
 };
 
 const ru: Dict = {
@@ -668,6 +680,18 @@ const ru: Dict = {
   pet_err_age: "Укажите корректный возраст.",
   pet_err_weight: "Укажите корректный вес.",
   pet_err_url: "Укажите корректную ссылку (https://…).",
+
+  book_select_pet: "Выберите сохранённого питомца",
+  book_select_pet_none: "— Ввести вручную —",
+  book_no_pets_hint: "Сохраните питомцев, чтобы бронировать быстрее.",
+  book_add_pet_profile: "Добавить питомца",
+  book_stay_duration: "Длительность пребывания",
+  book_nights_one: "ночь",
+  book_nights_many: "ночей",
+  book_err_past: "Дата не может быть в прошлом.",
+  dash_upcoming: "Ближайшие бронирования",
+  dash_no_upcoming: "Нет ближайших бронирований.",
+  dash_calendar: "Календарь",
 };
 
 const el: Dict = {
@@ -1001,6 +1025,18 @@ const el: Dict = {
   pet_err_age: "Δώστε έγκυρη ηλικία.",
   pet_err_weight: "Δώστε έγκυρο βάρος.",
   pet_err_url: "Δώστε έγκυρο σύνδεσμο (https://…).",
+
+  book_select_pet: "Επιλέξτε αποθηκευμένο κατοικίδιο",
+  book_select_pet_none: "— Χειροκίνητα —",
+  book_no_pets_hint: "Αποθηκεύστε τα κατοικίδιά σας για γρήγορη κράτηση.",
+  book_add_pet_profile: "Προσθήκη κατοικίδιου",
+  book_stay_duration: "Διάρκεια διαμονής",
+  book_nights_one: "νύχτα",
+  book_nights_many: "νύχτες",
+  book_err_past: "Η ημερομηνία δεν μπορεί να είναι στο παρελθόν.",
+  dash_upcoming: "Επερχόμενες κρατήσεις",
+  dash_no_upcoming: "Δεν υπάρχουν επερχόμενες κρατήσεις.",
+  dash_calendar: "Ημερολόγιο",
 };
 
 const dicts: Record<Lang, Dict> = { en, ru, el };

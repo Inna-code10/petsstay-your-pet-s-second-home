@@ -99,6 +99,22 @@ export async function getMyBookings() {
   return data ?? [];
 }
 
+export async function getBookingCalendarEvents() {
+  const { data: sessionData } = await supabase.auth.getSession();
+  const uid = sessionData.session?.user?.id;
+  if (!uid) return [];
+  const today = new Date().toISOString().slice(0, 10);
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("id, pet_type, arrival_date, departure_date, status")
+    .eq("user_id", uid)
+    .gte("departure_date", today)
+    .neq("status", "cancelled")
+    .order("arrival_date", { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}
+
 export async function createContactMessage(input: ContactInput) {
   const errs = validateContact(input);
   if (errs.length) throw new Error("validation_failed");

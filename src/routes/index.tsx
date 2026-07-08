@@ -437,7 +437,11 @@ function BookingForm() {
   const [departure, setDeparture] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [myPets, setMyPets] = useState<Array<{ id: string; pet_name: string; pet_type: string }>>([]);
+  const [selectedPetId, setSelectedPetId] = useState<string>("");
   const prefilledRef = useRef(false);
+
+  const todayIso = new Date().toISOString().slice(0, 10);
 
   // Prefill from authenticated user's profile (fields remain editable)
   useEffect(() => {
@@ -462,11 +466,37 @@ function BookingForm() {
     return () => { cancelled = true; };
   }, [user, fullName]);
 
+  // Load saved pets for logged-in users
+  useEffect(() => {
+    if (!user) { setMyPets([]); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const { getMyPets } = await import("@/lib/services");
+        const rows = await getMyPets();
+        if (!cancelled) setMyPets(rows as Array<{ id: string; pet_name: string; pet_type: string }>);
+      } catch (err) { console.error("[BookingForm pets]", err); }
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+
+  const nights = useMemo(() => {
+    if (!arrival || !departure || arrival > departure) return 0;
+    const a = new Date(arrival + "T00:00:00");
+    const d = new Date(departure + "T00:00:00");
+    return Math.max(0, Math.round((d.getTime() - a.getTime()) / 86400000));
+  }, [arrival, departure]);
+
+  function onSelectSavedPet(id: string) {
+    setSelectedPetId(id);
+    if (!id) return;
+    const p = myPets.find((x) => x.id === id);
+    if (p && (p.pet_type === "dog" || p.pet_type === "cat")) setPet(p.pet_type);
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErrorMsg("");
-    // basic validation
     if (!name.trim() || !phone.trim() || !email.trim() || !arrival || !departure) {
       setStatus("error"); setErrorMsg(t("book_err_required")); return;
     }
@@ -475,6 +505,9 @@ function BookingForm() {
     }
     if (!/^[+\d][\d\s\-()]{5,}$/.test(phone.trim())) {
       setStatus("error"); setErrorMsg(t("book_err_phone")); return;
+    }
+    if (arrival < todayIso) {
+      setStatus("error"); setErrorMsg(t("book_err_past")); return;
     }
     if (arrival > departure) {
       setStatus("error"); setErrorMsg(t("book_err_dates")); return;
@@ -487,7 +520,7 @@ function BookingForm() {
         arrival_date: arrival, departure_date: departure,
       });
       setStatus("success");
-      setName(""); setPhone(""); setEmail(""); setArrival(""); setDeparture("");
+      setName(""); setPhone(""); setEmail(""); setArrival(""); setDeparture(""); setSelectedPetId("");
       setTimeout(() => setStatus("idle"), 4000);
     } catch (err) {
       console.error("[BookingForm]", err);
@@ -563,6 +596,38 @@ function BookingForm() {
           />
         </Field>
 
+        {user && (
+          <div className="md:col-span-12">
+            {myPets.length > 0 ? (
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider shrink-0">
+                  {t("book_select_pet")}
+                </label>
+                <select
+                  className="input-base sm:max-w-xs"
+                  value={selectedPetId}
+                  onChange={(e) => onSelectSavedPet(e.target.value)}
+                  disabled={busy}
+                >
+                  <option value="">{t("book_select_pet_none")}</option>
+                  {myPets.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.pet_name} · {p.pet_type === "dog" ? t("book_dog") : p.pet_type === "cat" ? t("book_cat") : p.pet_type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <div className="text-xs text-muted-foreground flex items-center gap-2 flex-wrap">
+                <span>{t("book_no_pets_hint")}</span>
+                <Link to="/dashboard" className="font-semibold text-accent hover:underline">
+                  {t("book_add_pet_profile")} →
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="md:col-span-12 lg:col-span-12 flex flex-col sm:flex-row sm:items-center gap-3">
           <button type="submit" disabled={busy} className="btn-hero inline-flex items-center justify-center gap-2 rounded-full h-[46px] px-5 text-sm font-bold disabled:opacity-70 w-full sm:w-auto">
             {busy ? (
@@ -573,6 +638,11 @@ function BookingForm() {
               <>{t("book_submit")}</>
             )}
           </button>
+          {nights > 0 && (
+            <div className="text-sm font-semibold text-muted-foreground">
+              {t("book_stay_duration")}: <span className="text-foreground">{nights} {nights === 1 ? t("book_nights_one") : t("book_nights_many")}</span>
+            </div>
+          )}
           <div aria-live="polite" className="text-sm font-semibold">
             {status === "success" && <span className="text-accent">{t("book_success")}</span>}
             {status === "error" && <span className="text-destructive">{errorMsg}</span>}

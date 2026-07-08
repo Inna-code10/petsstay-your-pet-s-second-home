@@ -40,20 +40,16 @@ import {
 
 import { useI18n, type Lang } from "@/lib/i18n";
 import { DateField } from "@/components/DateField";
-import hero from "@/assets/hero.jpg";
-import g1 from "@/assets/gallery-1.jpg";
-import g2 from "@/assets/gallery-2.jpg";
-import g3 from "@/assets/gallery-3.jpg";
-import g4 from "@/assets/gallery-4.jpg";
-import g5 from "@/assets/gallery-5.jpg";
-import g6 from "@/assets/gallery-6.jpg";
-import team1 from "@/assets/team-1.jpg";
-import team2 from "@/assets/team-2.jpg";
-import team3 from "@/assets/team-3.jpg";
-import location from "@/assets/location.jpg";
-import c1 from "@/assets/customer-1.jpg";
-import c2 from "@/assets/customer-2.jpg";
-import c3 from "@/assets/customer-3.jpg";
+import {
+  heroImage as hero,
+  galleryImages,
+  teamPhotos,
+  reviewAvatars,
+  locationImage as location,
+} from "@/lib/images";
+const team1 = teamPhotos.member1;
+const team2 = teamPhotos.member2;
+const team3 = teamPhotos.member3;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -974,14 +970,7 @@ function Stats() {
 
 function Gallery() {
   const { t } = useI18n();
-  const imgs = [
-    { src: g1, alt: "Happy labrador running" , span: "row-span-2" },
-    { src: g2, alt: "Cat relaxing", span: "" },
-    { src: g6, alt: "Dogs playing", span: "" },
-    { src: g3, alt: "Facility interior", span: "" },
-    { src: g4, alt: "Walking dogs in Limassol", span: "row-span-2" },
-    { src: g5, alt: "Sleeping puppy", span: "" },
-  ];
+  const imgs = galleryImages;
   return (
     <section className="py-20 md:py-28 bg-cream">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -1006,7 +995,7 @@ function Gallery() {
 
 /* ------------------------------ TESTIMONIALS ------------------------------ */
 
-const REVIEW_PHOTOS = [c1, c2, c3, c2, c1, c3];
+const REVIEW_PHOTOS = reviewAvatars;
 
 function Testimonials() {
   const { t } = useI18n();

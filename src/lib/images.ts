@@ -22,11 +22,11 @@ const unsplash = (id: string, w = 1600, q = 80) =>
 /** Hero: warm interaction between a person and a dog. */
 export const heroImage = unsplash("photo-1450778869180-41d0601e046e", 1800);
 
-/** Gallery: dogs, cats, walks, care, cozy rest. */
-export const galleryImages: { src: string; alt: string; span?: string }[] = [
-  { src: unsplash("photo-1587300003388-59208cc962cb", 1200), alt: "Golden retriever running happily outdoors", span: "row-span-2" },
-  { src: unsplash("photo-1514888286974-6c03e2ca1dba", 900), alt: "Cat relaxing in warm sunlight", span: "" },
-  { src: unsplash("photo-1546975490-e8b92a360b24", 900), alt: "Two dogs playing together", span: "" },
+/** Gallery: cats, dogs, walks, care, cozy rest. */
+export const galleryImages: { src: string; alt: string; span?: string; position?: string }[] = [
+  { src: unsplash("photo-1526336024174-e58f5cdd8e13", 1200), alt: "Relaxed cat resting in a cozy bright interior", span: "row-span-2", position: "object-center" },
+  { src: unsplash("photo-1573865526739-10659fec78a5", 900), alt: "Close-up of a friendly, healthy cat", span: "", position: "object-center" },
+  { src: unsplash("photo-1592194996308-7b43878e84a6", 900), alt: "Person gently holding and caring for a cat", span: "", position: "object-center" },
   { src: unsplash("photo-1583337130417-3346a1be7dee", 900), alt: "Caregiver feeding a dog", span: "" },
   { src: unsplash("photo-1548199973-03cce0bbc87b", 1200), alt: "Person walking a dog outdoors in the sun", span: "row-span-2" },
   { src: unsplash("photo-1425082661705-1834bfd09dca", 900), alt: "Puppy sleeping peacefully", span: "" },
@@ -34,10 +34,11 @@ export const galleryImages: { src: string; alt: string; span?: string }[] = [
 
 /** Team portraits — demo stock photos, replace with real staff photos later. */
 export const teamPhotos = {
-  member1: unsplash("photo-1494790108377-be9c29b29330", 800),
-  member2: unsplash("photo-1507003211169-0a1dd7228f2d", 800),
+  member1: unsplash("photo-1573496359142-b8d87734a5a2", 800),
+  member2: unsplash("photo-1580489944761-15a19d654956", 800),
   member3: unsplash("photo-1438761681033-6461ffad8d80", 800),
 };
+
 
 /** Testimonial avatars — demo stock photos, replace with real customer photos later. */
 export const reviewAvatars = [

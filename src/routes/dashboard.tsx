@@ -25,6 +25,7 @@ function DashboardPage() {
   return (
     <ProtectedShell requireRole="client" title={t("dash_client_title")} intro={t("dash_client_intro")}>
       <MyBookings />
+      <MyPets />
     </ProtectedShell>
   );
 }

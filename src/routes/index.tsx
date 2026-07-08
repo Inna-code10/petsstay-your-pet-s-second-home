@@ -1230,45 +1230,46 @@ function Location() {
     <section id="contact" className="py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHead eyebrow={t("loc_eyebrow")} title={t("loc_title")} sub={t("loc_sub")} />
-        <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* LEFT: Contact form */}
-          <div className="lg:col-span-7 order-2 lg:order-1">
-            <ContactForm />
+        <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* LEFT: Info card */}
+          <div className="rounded-[28px] overflow-hidden bg-cream border border-border shadow-[var(--shadow-card)]">
+            <img src={location} alt="PetSStay entrance in Limassol" loading="lazy" width={1200} height={900} className="w-full h-56 object-cover object-center md:h-72" />
+            <div className="p-6 md:p-7 space-y-4">
+              <div>
+                <div className="text-[11px] font-bold uppercase tracking-wider text-primary">{t("cf_info_title")}</div>
+                <div className="text-sm text-muted-foreground mt-1">{t("cf_info_sub")}</div>
+              </div>
+              <InfoRow icon={MapPin} label={t("loc_address")} value={t("loc_address_val")} />
+              <InfoRow icon={Clock} label={t("loc_hours")} value={t("loc_hours_val")} />
+              <InfoRow icon={Phone} label={t("loc_phone")} value={PHONE_DISPLAY} href={`tel:${PHONE_DISPLAY.replace(/\s/g, "")}`} />
+              <InfoRow icon={MessageCircle} label={t("loc_whatsapp")} value={PHONE_DISPLAY} href={WHATSAPP} />
+              <InfoRow icon={Mail} label={t("loc_email")} value="hello@petsstay.cy" href="mailto:hello@petsstay.cy" />
+              <a
+                href="#book"
+                className="btn-hero mt-2 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold w-full"
+              >
+                {t("cta_book_stay")} <ArrowRight className="h-4 w-4" />
+              </a>
+              <a
+                href="https://www.google.com/maps?q=Limassol+Cyprus"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold w-full border border-border hover:bg-white transition-colors"
+              >
+                {t("loc_directions")} <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
           </div>
 
-          {/* RIGHT: Info + map */}
-          <div className="lg:col-span-5 order-1 lg:order-2 space-y-6">
-            <div className="rounded-[28px] overflow-hidden bg-cream border border-border shadow-[var(--shadow-card)]">
-              <img src={location} alt="PetSStay entrance in Limassol" loading="lazy" width={1200} height={900} className="w-full h-56 object-cover object-center md:h-auto md:object-contain lg:h-56 lg:object-cover" />
-              <div className="p-6 md:p-7 space-y-4">
-                <div>
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-primary">{t("cf_info_title")}</div>
-                  <div className="text-sm text-muted-foreground mt-1">{t("cf_info_sub")}</div>
-                </div>
-                <InfoRow icon={MapPin} label={t("loc_address")} value={t("loc_address_val")} />
-                <InfoRow icon={Clock} label={t("loc_hours")} value={t("loc_hours_val")} />
-                <InfoRow icon={Phone} label={t("loc_phone")} value={PHONE_DISPLAY} href={`tel:${PHONE_DISPLAY.replace(/\s/g, "")}`} />
-                <InfoRow icon={MessageCircle} label={t("loc_whatsapp")} value={PHONE_DISPLAY} href={WHATSAPP} />
-                <InfoRow icon={Mail} label={t("loc_email")} value="hello@petsstay.cy" href="mailto:hello@petsstay.cy" />
-                <a
-                  href="https://www.google.com/maps?q=Limassol+Cyprus"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn-hero mt-2 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold w-full"
-                >
-                  {t("loc_directions")} <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
-            </div>
-            <div className="rounded-[28px] overflow-hidden bg-white border border-border shadow-[var(--shadow-card)] min-h-[280px]">
-              <iframe
-                title="PetSStay Limassol location"
-                src="https://www.google.com/maps?q=Limassol,+Cyprus&output=embed"
-                loading="lazy"
-                className="w-full h-full min-h-[280px] border-0"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
+          {/* RIGHT: Map */}
+          <div className="rounded-[28px] overflow-hidden bg-white border border-border shadow-[var(--shadow-card)] min-h-[420px]">
+            <iframe
+              title="PetSStay Limassol location"
+              src="https://www.google.com/maps?q=Limassol,+Cyprus&output=embed"
+              loading="lazy"
+              className="w-full h-full min-h-[420px] border-0"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
       </div>

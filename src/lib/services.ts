@@ -134,13 +134,35 @@ export async function createContactMessage(input: ContactInput) {
 
 /* --------------------------- Queries (staff/admin) --------------------------- */
 
+export type BookingStatus = "new" | "confirmed" | "cancelled" | "completed";
+
 export async function getBookings() {
   const { data, error } = await supabase
     .from("bookings")
     .select("*")
     .order("created_at", { ascending: false });
   if (error) throw error;
+  return data ?? [];
+}
+
+export async function updateBookingStatus(id: string, status: BookingStatus) {
+  const { error } = await supabase.from("bookings").update({ status }).eq("id", id);
+  if (error) throw error;
+  return { ok: true };
+}
+
+export async function getBookingDetails(id: string) {
+  const { data, error } = await supabase.from("bookings").select("*").eq("id", id).maybeSingle();
+  if (error) throw error;
   return data;
+}
+
+export async function getPetsForUsers(userIds: string[]) {
+  const ids = Array.from(new Set(userIds.filter(Boolean)));
+  if (ids.length === 0) return [];
+  const { data, error } = await supabase.from("pets").select("*").in("user_id", ids);
+  if (error) throw error;
+  return data ?? [];
 }
 
 export async function getContactMessages() {

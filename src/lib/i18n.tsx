@@ -680,6 +680,18 @@ const ru: Dict = {
   pet_err_age: "Укажите корректный возраст.",
   pet_err_weight: "Укажите корректный вес.",
   pet_err_url: "Укажите корректную ссылку (https://…).",
+
+  book_select_pet: "Выберите сохранённого питомца",
+  book_select_pet_none: "— Ввести вручную —",
+  book_no_pets_hint: "Сохраните питомцев, чтобы бронировать быстрее.",
+  book_add_pet_profile: "Добавить питомца",
+  book_stay_duration: "Длительность пребывания",
+  book_nights_one: "ночь",
+  book_nights_many: "ночей",
+  book_err_past: "Дата не может быть в прошлом.",
+  dash_upcoming: "Ближайшие бронирования",
+  dash_no_upcoming: "Нет ближайших бронирований.",
+  dash_calendar: "Календарь",
 };
 
 const el: Dict = {

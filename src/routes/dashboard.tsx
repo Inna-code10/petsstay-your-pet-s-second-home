@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { ProtectedShell } from "@/components/DashboardShell";
 import { getMyBookings } from "@/lib/services";
+import { MyPets } from "@/components/MyPets";
 
 export const Route = createFileRoute("/dashboard")({
   ssr: false,
@@ -24,6 +25,7 @@ function DashboardPage() {
   return (
     <ProtectedShell requireRole="client" title={t("dash_client_title")} intro={t("dash_client_intro")}>
       <MyBookings />
+      <MyPets />
     </ProtectedShell>
   );
 }

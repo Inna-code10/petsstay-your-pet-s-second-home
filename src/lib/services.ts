@@ -135,3 +135,104 @@ export async function getContactMessages() {
   if (error) throw error;
   return data;
 }
+
+/* --------------------------- Pets --------------------------- */
+
+export type PetInput = {
+  pet_name: string;
+  pet_type: "dog" | "cat" | string;
+  breed?: string | null;
+  age?: number | null;
+  weight?: number | null;
+  gender?: string | null;
+  photo_url?: string | null;
+  vaccination_status?: string | null;
+  medical_notes?: string | null;
+  allergies?: string | null;
+  feeding_schedule?: string | null;
+  behavior_notes?: string | null;
+  emergency_contact?: string | null;
+};
+
+const URL_RE = /^https?:\/\/[^\s]+$/i;
+
+export function validatePet(input: PetInput): ValidationError[] {
+  const errs: ValidationError[] = [];
+  if (!sanitize(input.pet_name)) errs.push({ field: "pet_name", code: "required" });
+  if (!sanitize(input.pet_type)) errs.push({ field: "pet_type", code: "required" });
+  if (input.age != null && input.age !== ("" as unknown as number)) {
+    const n = Number(input.age);
+    if (!Number.isFinite(n) || n < 0 || n > 40) errs.push({ field: "age", code: "invalid" });
+  }
+  if (input.weight != null && input.weight !== ("" as unknown as number)) {
+    const n = Number(input.weight);
+    if (!Number.isFinite(n) || n <= 0 || n > 200) errs.push({ field: "weight", code: "invalid" });
+  }
+  if (input.photo_url && !URL_RE.test(input.photo_url.trim())) {
+    errs.push({ field: "photo_url", code: "url" });
+  }
+  return errs;
+}
+
+function normalizePet(input: PetInput) {
+  const opt = (s?: string | null) => (s && sanitize(s) ? sanitize(s) : null);
+  const num = (n?: number | null) => {
+    if (n == null || (n as unknown) === "") return null;
+    const v = Number(n);
+    return Number.isFinite(v) ? v : null;
+  };
+  return {
+    pet_name: sanitize(input.pet_name),
+    pet_type: sanitize(input.pet_type),
+    breed: opt(input.breed),
+    age: num(input.age),
+    weight: num(input.weight),
+    gender: opt(input.gender),
+    photo_url: input.photo_url ? sanitize(input.photo_url) : null,
+    vaccination_status: opt(input.vaccination_status),
+    medical_notes: opt(input.medical_notes),
+    allergies: opt(input.allergies),
+    feeding_schedule: opt(input.feeding_schedule),
+    behavior_notes: opt(input.behavior_notes),
+    emergency_contact: opt(input.emergency_contact),
+  };
+}
+
+export async function getMyPets() {
+  const { data: sessionData } = await supabase.auth.getSession();
+  const uid = sessionData.session?.user?.id;
+  if (!uid) return [];
+  const { data, error } = await supabase
+    .from("pets")
+    .select("*")
+    .eq("user_id", uid)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function createPet(input: PetInput) {
+  const errs = validatePet(input);
+  if (errs.length) throw new Error("validation_failed");
+  const { data: sessionData } = await supabase.auth.getSession();
+  const uid = sessionData.session?.user?.id;
+  if (!uid) throw new Error("not_authenticated");
+  const payload = { ...normalizePet(input), user_id: uid };
+  const { error } = await supabase.from("pets").insert(payload);
+  if (error) throw error;
+  return { ok: true };
+}
+
+export async function updatePet(id: string, input: PetInput) {
+  const errs = validatePet(input);
+  if (errs.length) throw new Error("validation_failed");
+  const { error } = await supabase.from("pets").update(normalizePet(input)).eq("id", id);
+  if (error) throw error;
+  return { ok: true };
+}
+
+export async function deletePet(id: string) {
+  const { error } = await supabase.from("pets").delete().eq("id", id);
+  if (error) throw error;
+  return { ok: true };
+}

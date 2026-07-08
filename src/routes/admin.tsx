@@ -330,5 +330,3 @@ function PetsTable() {
   );
 }
 
-// Prevent unused import warning for parseISO/format if tree-shaking rules ever add strict.
-export const _dateFmt = { format, parseISO };

@@ -48,9 +48,9 @@ export const galleryImages: { src: string; alt: string; span?: string; position?
 /** Team portraits — authentic Unsplash portraits (2 women, 1 man). */
 export const teamPhotos = {
   // Maria Ioannou — Founder & Head Caretaker (woman, 30s, confident & warm)
-  member1: unsplash("photo-1609708993734-29d07306bdc7", 800),
+  member1: unsplash("photo-1573496359142-b8d87734a5a2", 800),
   // Andreas Petrou — Resident Veterinarian (man, 30s, kind & approachable)
-  member2: unsplash("photo-1758874383973-83166565759c", 800),
+  member2: unsplash("photo-1531427186611-ecfd6d936c79", 800),
   // Elena Georgiou — Senior Pet Sitter (woman, late 20s, gentle & natural)
   member3: unsplash("photo-1760552069335-07d43ca826f4", 800),
 };

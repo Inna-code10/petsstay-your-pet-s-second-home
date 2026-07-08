@@ -435,6 +435,7 @@ function BookingForm() {
   const [email, setEmail] = useState("");
   const [arrival, setArrival] = useState("");
   const [departure, setDeparture] = useState("");
+  const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [myPets, setMyPets] = useState<Array<{ id: string; pet_name: string; pet_type: string }>>([]);
@@ -518,9 +519,10 @@ function BookingForm() {
       await createBooking({
         owner_name: name, phone, email, pet_type: pet,
         arrival_date: arrival, departure_date: departure,
+        message: message.trim() ? message.trim() : null,
       });
       setStatus("success");
-      setName(""); setPhone(""); setEmail(""); setArrival(""); setDeparture(""); setSelectedPetId("");
+      setName(""); setPhone(""); setEmail(""); setArrival(""); setDeparture(""); setMessage(""); setSelectedPetId("");
       setTimeout(() => setStatus("idle"), 4000);
     } catch (err) {
       console.error("[BookingForm]", err);
@@ -627,6 +629,23 @@ function BookingForm() {
             )}
           </div>
         )}
+
+        <div className="md:col-span-12">
+          <label className="mb-1.5 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+            <span>{t("book_message")}</span>
+            <span className="normal-case tracking-normal font-medium text-[10px] text-muted-foreground/70">({t("book_optional")})</span>
+          </label>
+          <textarea
+            rows={3}
+            className="input-base"
+            style={{ height: "auto", borderRadius: 18, paddingTop: 12, paddingBottom: 12, minHeight: 90, resize: "vertical" }}
+            placeholder={t("book_message_ph")}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            disabled={busy}
+            maxLength={1000}
+          />
+        </div>
 
         <div className="md:col-span-12 lg:col-span-12 flex flex-col sm:flex-row sm:items-center gap-3">
           <button type="submit" disabled={busy} className="btn-hero inline-flex items-center justify-center gap-2 rounded-full h-[46px] px-5 text-sm font-bold disabled:opacity-70 w-full sm:w-auto">
@@ -1211,45 +1230,46 @@ function Location() {
     <section id="contact" className="py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHead eyebrow={t("loc_eyebrow")} title={t("loc_title")} sub={t("loc_sub")} />
-        <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* LEFT: Contact form */}
-          <div className="lg:col-span-7 order-2 lg:order-1">
-            <ContactForm />
+        <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* LEFT: Info card */}
+          <div className="rounded-[28px] overflow-hidden bg-cream border border-border shadow-[var(--shadow-card)]">
+            <img src={location} alt="PetSStay entrance in Limassol" loading="lazy" width={1200} height={900} className="w-full h-56 object-cover object-center md:h-72" />
+            <div className="p-6 md:p-7 space-y-4">
+              <div>
+                <div className="text-[11px] font-bold uppercase tracking-wider text-primary">{t("cf_info_title")}</div>
+                <div className="text-sm text-muted-foreground mt-1">{t("cf_info_sub")}</div>
+              </div>
+              <InfoRow icon={MapPin} label={t("loc_address")} value={t("loc_address_val")} />
+              <InfoRow icon={Clock} label={t("loc_hours")} value={t("loc_hours_val")} />
+              <InfoRow icon={Phone} label={t("loc_phone")} value={PHONE_DISPLAY} href={`tel:${PHONE_DISPLAY.replace(/\s/g, "")}`} />
+              <InfoRow icon={MessageCircle} label={t("loc_whatsapp")} value={PHONE_DISPLAY} href={WHATSAPP} />
+              <InfoRow icon={Mail} label={t("loc_email")} value="hello@petsstay.cy" href="mailto:hello@petsstay.cy" />
+              <a
+                href="#book"
+                className="btn-hero mt-2 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold w-full"
+              >
+                {t("cta_book_stay")} <ArrowRight className="h-4 w-4" />
+              </a>
+              <a
+                href="https://www.google.com/maps?q=Limassol+Cyprus"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold w-full border border-border hover:bg-white transition-colors"
+              >
+                {t("loc_directions")} <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
           </div>
 
-          {/* RIGHT: Info + map */}
-          <div className="lg:col-span-5 order-1 lg:order-2 space-y-6">
-            <div className="rounded-[28px] overflow-hidden bg-cream border border-border shadow-[var(--shadow-card)]">
-              <img src={location} alt="PetSStay entrance in Limassol" loading="lazy" width={1200} height={900} className="w-full h-56 object-cover object-center md:h-auto md:object-contain lg:h-56 lg:object-cover" />
-              <div className="p-6 md:p-7 space-y-4">
-                <div>
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-primary">{t("cf_info_title")}</div>
-                  <div className="text-sm text-muted-foreground mt-1">{t("cf_info_sub")}</div>
-                </div>
-                <InfoRow icon={MapPin} label={t("loc_address")} value={t("loc_address_val")} />
-                <InfoRow icon={Clock} label={t("loc_hours")} value={t("loc_hours_val")} />
-                <InfoRow icon={Phone} label={t("loc_phone")} value={PHONE_DISPLAY} href={`tel:${PHONE_DISPLAY.replace(/\s/g, "")}`} />
-                <InfoRow icon={MessageCircle} label={t("loc_whatsapp")} value={PHONE_DISPLAY} href={WHATSAPP} />
-                <InfoRow icon={Mail} label={t("loc_email")} value="hello@petsstay.cy" href="mailto:hello@petsstay.cy" />
-                <a
-                  href="https://www.google.com/maps?q=Limassol+Cyprus"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn-hero mt-2 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold w-full"
-                >
-                  {t("loc_directions")} <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
-            </div>
-            <div className="rounded-[28px] overflow-hidden bg-white border border-border shadow-[var(--shadow-card)] min-h-[280px]">
-              <iframe
-                title="PetSStay Limassol location"
-                src="https://www.google.com/maps?q=Limassol,+Cyprus&output=embed"
-                loading="lazy"
-                className="w-full h-full min-h-[280px] border-0"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
+          {/* RIGHT: Map */}
+          <div className="rounded-[28px] overflow-hidden bg-white border border-border shadow-[var(--shadow-card)] min-h-[420px]">
+            <iframe
+              title="PetSStay Limassol location"
+              src="https://www.google.com/maps?q=Limassol,+Cyprus&output=embed"
+              loading="lazy"
+              className="w-full h-full min-h-[420px] border-0"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
       </div>
@@ -1257,257 +1277,6 @@ function Location() {
   );
 }
 
-/* ------------------------------ CONTACT FORM ------------------------------ */
-
-type ContactFormValues = {
-  name: string;
-  email: string;
-  phone: string;
-  subject: string;
-  message: string;
-};
-
-const EMPTY_CONTACT: ContactFormValues = { name: "", email: "", phone: "", subject: "", message: "" };
-
-async function submitContactMessage(values: ContactFormValues): Promise<void> {
-  const { createContactMessage } = await import("@/lib/services");
-  await createContactMessage({
-    full_name: values.name,
-    email: values.email,
-    phone: values.phone || null,
-    subject: values.subject || null,
-    message: values.message,
-  });
-}
-
-function ContactForm() {
-  const { t } = useI18n();
-  const [values, setValues] = useState<ContactFormValues>(EMPTY_CONTACT);
-  const [errors, setErrors] = useState<Partial<Record<keyof ContactFormValues, string>>>({});
-  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [errorMsg, setErrorMsg] = useState<string>("");
-
-  function validate(v: ContactFormValues) {
-    const next: Partial<Record<keyof ContactFormValues, string>> = {};
-    if (!v.name.trim()) next.name = t("cf_err_required");
-    if (!v.email.trim()) next.email = t("cf_err_required");
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email.trim())) next.email = t("cf_err_email");
-    if (!v.subject.trim()) next.subject = t("cf_err_required");
-    if (!v.message.trim()) next.message = t("cf_err_required");
-    if (v.phone.trim() && !/^[+\d][\d\s\-()]{5,}$/.test(v.phone.trim())) next.phone = t("cf_err_phone");
-    return next;
-  }
-
-  function update<K extends keyof ContactFormValues>(key: K, value: string) {
-    setValues((prev) => ({ ...prev, [key]: value }));
-    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
-    if (status === "success" || status === "error") setStatus("idle");
-  }
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const next = validate(values);
-    setErrors(next);
-    if (Object.keys(next).length > 0) return;
-    setStatus("submitting");
-    setErrorMsg("");
-    try {
-      await submitContactMessage(values);
-      setStatus("success");
-      setValues(EMPTY_CONTACT);
-    } catch (err) {
-      console.error("[ContactForm]", err);
-      setStatus("error");
-      setErrorMsg(t("cf_error"));
-    }
-  }
-
-  const busy = status === "submitting";
-
-  return (
-    <div className="rounded-[28px] bg-white border border-border shadow-[var(--shadow-card)] p-6 md:p-8 lg:p-10">
-      <div className="flex items-start gap-3">
-        <div className="hidden sm:flex h-11 w-11 items-center justify-center rounded-2xl text-primary-foreground shadow-[var(--shadow-glow)] shrink-0" style={{ background: "var(--gradient-sun)" }}>
-          <Mail className="h-5 w-5" />
-        </div>
-        <div>
-          <div className="text-[11px] font-bold uppercase tracking-wider text-primary">{t("cf_eyebrow")}</div>
-          <h3 className="mt-1 text-2xl md:text-3xl font-extrabold tracking-tight">{t("cf_title")}</h3>
-          <p className="mt-2 text-sm md:text-base text-muted-foreground max-w-lg">{t("cf_sub")}</p>
-        </div>
-      </div>
-
-      <form noValidate onSubmit={onSubmit} className="mt-7 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ContactField id="cf-name" label={t("cf_name")} required error={errors.name}>
-          <input
-            id="cf-name"
-            type="text"
-            autoComplete="name"
-            className={contactInputClass(!!errors.name)}
-            placeholder={t("cf_name_ph")}
-            value={values.name}
-            onChange={(e) => update("name", e.target.value)}
-            aria-invalid={!!errors.name}
-            aria-required="true"
-            disabled={busy}
-          />
-        </ContactField>
-
-        <ContactField id="cf-email" label={t("cf_email")} required error={errors.email}>
-          <input
-            id="cf-email"
-            type="email"
-            autoComplete="email"
-            className={contactInputClass(!!errors.email)}
-            placeholder={t("cf_email_ph")}
-            value={values.email}
-            onChange={(e) => update("email", e.target.value)}
-            aria-invalid={!!errors.email}
-            aria-required="true"
-            disabled={busy}
-          />
-        </ContactField>
-
-        <ContactField id="cf-phone" label={t("cf_phone")} optionalLabel={t("cf_optional")} error={errors.phone}>
-          <input
-            id="cf-phone"
-            type="tel"
-            autoComplete="tel"
-            className={contactInputClass(!!errors.phone)}
-            placeholder={t("cf_phone_ph")}
-            value={values.phone}
-            onChange={(e) => update("phone", e.target.value)}
-            disabled={busy}
-          />
-        </ContactField>
-
-        <ContactField id="cf-subject" label={t("cf_subject")} required error={errors.subject}>
-          <input
-            id="cf-subject"
-            type="text"
-            className={contactInputClass(!!errors.subject)}
-            placeholder={t("cf_subject_ph")}
-            value={values.subject}
-            onChange={(e) => update("subject", e.target.value)}
-            aria-invalid={!!errors.subject}
-            aria-required="true"
-            disabled={busy}
-          />
-        </ContactField>
-
-        <ContactField id="cf-message" label={t("cf_message")} required error={errors.message} className="md:col-span-2">
-          <textarea
-            id="cf-message"
-            rows={5}
-            className={`${contactInputClass(!!errors.message)} !h-auto !rounded-2xl py-3 resize-y min-h-[140px]`}
-            placeholder={t("cf_message_ph")}
-            value={values.message}
-            onChange={(e) => update("message", e.target.value)}
-            aria-invalid={!!errors.message}
-            aria-required="true"
-            disabled={busy}
-          />
-        </ContactField>
-
-        <div className="md:col-span-2 flex flex-col sm:flex-row sm:items-center gap-4 pt-2">
-          <button
-            type="submit"
-            disabled={busy}
-            className="btn-hero inline-flex items-center justify-center gap-2 rounded-full h-[52px] px-8 text-sm font-bold w-full sm:w-auto disabled:opacity-70"
-          >
-            {busy ? (
-              <>
-                <span className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />
-                {t("cf_submitting")}
-              </>
-            ) : (
-              <>
-                {t("cf_submit")} <ArrowRight className="h-4 w-4" />
-              </>
-            )}
-          </button>
-
-          <div aria-live="polite" className="min-h-[24px] text-sm font-semibold">
-            {status === "success" && (
-              <span className="inline-flex items-center gap-2 text-accent animate-fade-up">
-                <Check className="h-4 w-4" /> {t("cf_success")}
-              </span>
-            )}
-            {status === "error" && (
-              <span className="inline-flex items-center gap-2 text-destructive animate-fade-up">
-                {errorMsg}
-              </span>
-            )}
-          </div>
-        </div>
-      </form>
-
-      <style>{`
-        .cf-input {
-          height: 52px;
-          width: 100%;
-          border-radius: 9999px;
-          background: white;
-          border: 1px solid var(--border);
-          padding: 0 18px;
-          font-size: 14px;
-          font-weight: 500;
-          color: var(--foreground);
-          outline: none;
-          transition: border-color .2s, box-shadow .2s, transform .2s;
-        }
-        .cf-input::placeholder { color: color-mix(in oklab, var(--muted-foreground) 80%, transparent); }
-        .cf-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 18%, transparent); }
-        .cf-input:disabled { opacity: .7; cursor: not-allowed; }
-        .cf-input-error { border-color: var(--destructive); box-shadow: 0 0 0 4px color-mix(in oklab, var(--destructive) 15%, transparent); }
-      `}</style>
-    </div>
-  );
-}
-
-function contactInputClass(hasError: boolean) {
-  return `cf-input ${hasError ? "cf-input-error" : ""}`.trim();
-}
-
-function ContactField({
-  id,
-  label,
-  required,
-  optionalLabel,
-  error,
-  className,
-  children,
-}: {
-  id: string;
-  label: string;
-  required?: boolean;
-  optionalLabel?: string;
-  error?: string;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  const errorId = `${id}-error`;
-  return (
-    <div className={className}>
-      <label htmlFor={id} className="mb-1.5 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-        <span>
-          {label}
-          {required && <span className="text-primary ml-0.5" aria-hidden="true">*</span>}
-        </span>
-        {optionalLabel && !required && (
-          <span className="normal-case tracking-normal font-medium text-[10px] text-muted-foreground/70">({optionalLabel})</span>
-        )}
-      </label>
-      {/* child inherits htmlFor via id passed by parent */}
-      {React.isValidElement(children) ? React.cloneElement(children as React.ReactElement<{ "aria-describedby"?: string }>, { "aria-describedby": error ? errorId : undefined }) : children}
-      {error && (
-        <p id={errorId} className="mt-1.5 text-xs font-semibold text-destructive">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
 
 
 function InfoRow({ icon: Icon, label, value, href }: { icon: typeof MapPin; label: string; value: string; href?: string }) {

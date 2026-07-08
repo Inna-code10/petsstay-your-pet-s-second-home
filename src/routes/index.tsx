@@ -435,6 +435,7 @@ function BookingForm() {
   const [email, setEmail] = useState("");
   const [arrival, setArrival] = useState("");
   const [departure, setDeparture] = useState("");
+  const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [myPets, setMyPets] = useState<Array<{ id: string; pet_name: string; pet_type: string }>>([]);

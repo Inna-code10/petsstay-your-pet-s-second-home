@@ -970,14 +970,7 @@ function Stats() {
 
 function Gallery() {
   const { t } = useI18n();
-  const imgs = [
-    { src: g1, alt: "Happy labrador running" , span: "row-span-2" },
-    { src: g2, alt: "Cat relaxing", span: "" },
-    { src: g6, alt: "Dogs playing", span: "" },
-    { src: g3, alt: "Facility interior", span: "" },
-    { src: g4, alt: "Walking dogs in Limassol", span: "row-span-2" },
-    { src: g5, alt: "Sleeping puppy", span: "" },
-  ];
+  const imgs = galleryImages;
   return (
     <section className="py-20 md:py-28 bg-cream">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

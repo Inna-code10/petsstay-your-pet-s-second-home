@@ -596,6 +596,38 @@ function BookingForm() {
           />
         </Field>
 
+        {user && (
+          <div className="md:col-span-12">
+            {myPets.length > 0 ? (
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider shrink-0">
+                  {t("book_select_pet")}
+                </label>
+                <select
+                  className="input-base sm:max-w-xs"
+                  value={selectedPetId}
+                  onChange={(e) => onSelectSavedPet(e.target.value)}
+                  disabled={busy}
+                >
+                  <option value="">{t("book_select_pet_none")}</option>
+                  {myPets.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.pet_name} · {p.pet_type === "dog" ? t("book_dog") : p.pet_type === "cat" ? t("book_cat") : p.pet_type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : (
+              <div className="text-xs text-muted-foreground flex items-center gap-2 flex-wrap">
+                <span>{t("book_no_pets_hint")}</span>
+                <Link to="/dashboard" className="font-semibold text-accent hover:underline">
+                  {t("book_add_pet_profile")} →
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="md:col-span-12 lg:col-span-12 flex flex-col sm:flex-row sm:items-center gap-3">
           <button type="submit" disabled={busy} className="btn-hero inline-flex items-center justify-center gap-2 rounded-full h-[46px] px-5 text-sm font-bold disabled:opacity-70 w-full sm:w-auto">
             {busy ? (
@@ -606,6 +638,11 @@ function BookingForm() {
               <>{t("book_submit")}</>
             )}
           </button>
+          {nights > 0 && (
+            <div className="text-sm font-semibold text-muted-foreground">
+              {t("book_stay_duration")}: <span className="text-foreground">{nights} {nights === 1 ? t("book_nights_one") : t("book_nights_many")}</span>
+            </div>
+          )}
           <div aria-live="polite" className="text-sm font-semibold">
             {status === "success" && <span className="text-accent">{t("book_success")}</span>}
             {status === "error" && <span className="text-destructive">{errorMsg}</span>}

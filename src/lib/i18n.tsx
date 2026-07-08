@@ -582,6 +582,20 @@ const ru: Dict = {
   dash_staff_intro: "Здесь скоро появятся заявки и сообщения клиентов.",
   dash_admin_title: "Панель администратора",
   dash_admin_intro: "Здесь скоро появятся инструменты управления бизнесом.",
+  dash_my_bookings: "Мои бронирования",
+  dash_no_bookings: "У вас пока нет бронирований.",
+  dash_create_booking: "Создать бронирование",
+  dash_loading: "Загрузка…",
+  dash_bookings_error: "Не удалось загрузить бронирования. Попробуйте снова.",
+  dash_col_pet: "Питомец",
+  dash_col_arrival: "Заезд",
+  dash_col_departure: "Выезд",
+  dash_col_price: "Итого",
+  dash_col_status: "Статус",
+  booking_status_new: "Новая",
+  booking_status_confirmed: "Подтверждена",
+  booking_status_cancelled: "Отменена",
+  booking_status_completed: "Завершена",
 };
 
 const el: Dict = {

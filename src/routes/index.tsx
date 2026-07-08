@@ -630,6 +630,23 @@ function BookingForm() {
           </div>
         )}
 
+        <div className="md:col-span-12">
+          <label className="mb-1.5 flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+            <span>{t("book_message")}</span>
+            <span className="normal-case tracking-normal font-medium text-[10px] text-muted-foreground/70">({t("book_optional")})</span>
+          </label>
+          <textarea
+            rows={3}
+            className="input-base"
+            style={{ height: "auto", borderRadius: 18, paddingTop: 12, paddingBottom: 12, minHeight: 90, resize: "vertical" }}
+            placeholder={t("book_message_ph")}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            disabled={busy}
+            maxLength={1000}
+          />
+        </div>
+
         <div className="md:col-span-12 lg:col-span-12 flex flex-col sm:flex-row sm:items-center gap-3">
           <button type="submit" disabled={busy} className="btn-hero inline-flex items-center justify-center gap-2 rounded-full h-[46px] px-5 text-sm font-bold disabled:opacity-70 w-full sm:w-auto">
             {busy ? (

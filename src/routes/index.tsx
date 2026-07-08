@@ -995,7 +995,7 @@ function Gallery() {
 
 /* ------------------------------ TESTIMONIALS ------------------------------ */
 
-const REVIEW_PHOTOS = [c1, c2, c3, c2, c1, c3];
+const REVIEW_PHOTOS = reviewAvatars;
 
 function Testimonials() {
   const { t } = useI18n();

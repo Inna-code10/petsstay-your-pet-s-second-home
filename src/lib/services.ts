@@ -165,6 +165,101 @@ export async function getPetsForUsers(userIds: string[]) {
   return data ?? [];
 }
 
+/* --------------------------- Admin --------------------------- */
+
+export type AdminStats = {
+  total: number;
+  new: number;
+  confirmed: number;
+  cancelled: number;
+  completed: number;
+  clients: number;
+  pets: number;
+  revenue: number;
+};
+
+export async function getAdminStats(): Promise<AdminStats> {
+  const [bookingsRes, profilesRes, petsRes] = await Promise.all([
+    supabase.from("bookings").select("status,total_price"),
+    supabase.from("profiles").select("user_id", { count: "exact", head: true }),
+    supabase.from("pets").select("id", { count: "exact", head: true }),
+  ]);
+  if (bookingsRes.error) throw bookingsRes.error;
+  if (profilesRes.error) throw profilesRes.error;
+  if (petsRes.error) throw petsRes.error;
+  const rows = bookingsRes.data ?? [];
+  const stats: AdminStats = {
+    total: rows.length,
+    new: 0,
+    confirmed: 0,
+    cancelled: 0,
+    completed: 0,
+    clients: profilesRes.count ?? 0,
+    pets: petsRes.count ?? 0,
+    revenue: 0,
+  };
+  for (const r of rows) {
+    const s = (r.status as keyof AdminStats) ?? "new";
+    if (s === "new" || s === "confirmed" || s === "cancelled" || s === "completed") {
+      (stats[s] as number) += 1;
+    }
+    if (r.status === "confirmed" || r.status === "completed") {
+      stats.revenue += Number(r.total_price) || 0;
+    }
+  }
+  return stats;
+}
+
+export async function getClientsOverview() {
+  const [profilesRes, bookingsRes, petsRes] = await Promise.all([
+    supabase.from("profiles").select("user_id,full_name,email,phone,created_at").order("created_at", { ascending: false }),
+    supabase.from("bookings").select("user_id"),
+    supabase.from("pets").select("user_id"),
+  ]);
+  if (profilesRes.error) throw profilesRes.error;
+  if (bookingsRes.error) throw bookingsRes.error;
+  if (petsRes.error) throw petsRes.error;
+  const bookingCount = new Map<string, number>();
+  for (const b of bookingsRes.data ?? []) {
+    if (!b.user_id) continue;
+    bookingCount.set(b.user_id, (bookingCount.get(b.user_id) ?? 0) + 1);
+  }
+  const petCount = new Map<string, number>();
+  for (const p of petsRes.data ?? []) {
+    if (!p.user_id) continue;
+    petCount.set(p.user_id, (petCount.get(p.user_id) ?? 0) + 1);
+  }
+  return (profilesRes.data ?? []).map((p) => ({
+    ...p,
+    bookings_count: bookingCount.get(p.user_id) ?? 0,
+    pets_count: petCount.get(p.user_id) ?? 0,
+  }));
+}
+
+export async function getPetsOverview() {
+  const [petsRes, profilesRes] = await Promise.all([
+    supabase.from("pets").select("*").order("created_at", { ascending: false }),
+    supabase.from("profiles").select("user_id,full_name,email"),
+  ]);
+  if (petsRes.error) throw petsRes.error;
+  if (profilesRes.error) throw profilesRes.error;
+  const owners = new Map<string, { full_name: string | null; email: string | null }>();
+  for (const p of profilesRes.data ?? []) {
+    owners.set(p.user_id, { full_name: p.full_name, email: p.email });
+  }
+  return (petsRes.data ?? []).map((p) => ({
+    ...p,
+    owner: p.user_id ? owners.get(p.user_id) ?? null : null,
+  }));
+}
+
+export async function deleteBooking(id: string) {
+  const { error } = await supabase.from("bookings").delete().eq("id", id);
+  if (error) throw error;
+  return { ok: true };
+}
+
+
 export async function getContactMessages() {
   const { data, error } = await supabase
     .from("contacts")

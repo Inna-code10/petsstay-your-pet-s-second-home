@@ -29,6 +29,7 @@ export type Database = {
           phone: string
           status: Database["public"]["Enums"]["booking_status"]
           total_price: number | null
+          user_id: string | null
         }
         Insert: {
           additional_services?: Json
@@ -44,6 +45,7 @@ export type Database = {
           phone: string
           status?: Database["public"]["Enums"]["booking_status"]
           total_price?: number | null
+          user_id?: string | null
         }
         Update: {
           additional_services?: Json
@@ -59,6 +61,7 @@ export type Database = {
           phone?: string
           status?: Database["public"]["Enums"]["booking_status"]
           total_price?: number | null
+          user_id?: string | null
         }
         Relationships: []
       }

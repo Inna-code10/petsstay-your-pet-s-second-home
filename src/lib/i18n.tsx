@@ -285,6 +285,20 @@ const en: Dict = {
   dash_staff_intro: "Booking requests and client messages will appear here soon.",
   dash_admin_title: "Admin Dashboard",
   dash_admin_intro: "Business management tools will appear here soon.",
+  dash_my_bookings: "My Bookings",
+  dash_no_bookings: "You do not have any bookings yet.",
+  dash_create_booking: "Create Booking",
+  dash_loading: "Loading…",
+  dash_bookings_error: "Could not load your bookings. Please try again.",
+  dash_col_pet: "Pet",
+  dash_col_arrival: "Arrival",
+  dash_col_departure: "Departure",
+  dash_col_price: "Total",
+  dash_col_status: "Status",
+  booking_status_new: "New",
+  booking_status_confirmed: "Confirmed",
+  booking_status_cancelled: "Cancelled",
+  booking_status_completed: "Completed",
 };
 
 const ru: Dict = {
@@ -568,6 +582,20 @@ const ru: Dict = {
   dash_staff_intro: "Здесь скоро появятся заявки и сообщения клиентов.",
   dash_admin_title: "Панель администратора",
   dash_admin_intro: "Здесь скоро появятся инструменты управления бизнесом.",
+  dash_my_bookings: "Мои бронирования",
+  dash_no_bookings: "У вас пока нет бронирований.",
+  dash_create_booking: "Создать бронирование",
+  dash_loading: "Загрузка…",
+  dash_bookings_error: "Не удалось загрузить бронирования. Попробуйте снова.",
+  dash_col_pet: "Питомец",
+  dash_col_arrival: "Заезд",
+  dash_col_departure: "Выезд",
+  dash_col_price: "Итого",
+  dash_col_status: "Статус",
+  booking_status_new: "Новая",
+  booking_status_confirmed: "Подтверждена",
+  booking_status_cancelled: "Отменена",
+  booking_status_completed: "Завершена",
 };
 
 const el: Dict = {
@@ -851,6 +879,20 @@ const el: Dict = {
   dash_staff_intro: "Τα αιτήματα κρατήσεων και τα μηνύματα πελατών θα εμφανίζονται εδώ σύντομα.",
   dash_admin_title: "Πίνακας διαχειριστή",
   dash_admin_intro: "Εργαλεία διαχείρισης θα εμφανίζονται εδώ σύντομα.",
+  dash_my_bookings: "Οι κρατήσεις μου",
+  dash_no_bookings: "Δεν έχετε ακόμη κρατήσεις.",
+  dash_create_booking: "Δημιουργία κράτησης",
+  dash_loading: "Φόρτωση…",
+  dash_bookings_error: "Αδυναμία φόρτωσης κρατήσεων. Δοκιμάστε ξανά.",
+  dash_col_pet: "Κατοικίδιο",
+  dash_col_arrival: "Άφιξη",
+  dash_col_departure: "Αναχώρηση",
+  dash_col_price: "Σύνολο",
+  dash_col_status: "Κατάσταση",
+  booking_status_new: "Νέα",
+  booking_status_confirmed: "Επιβεβαιωμένη",
+  booking_status_cancelled: "Ακυρωμένη",
+  booking_status_completed: "Ολοκληρωμένη",
 };
 
 const dicts: Record<Lang, Dict> = { en, ru, el };

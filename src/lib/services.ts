@@ -63,6 +63,10 @@ export async function createBooking(input: BookingInput) {
   const errs = validateBooking(input);
   if (errs.length) throw new Error("validation_failed");
 
+  // Attach user_id when a session is available (anonymous bookings are still allowed).
+  const { data: sessionData } = await supabase.auth.getSession();
+  const userId = sessionData.session?.user?.id ?? null;
+
   const payload = {
     owner_name: sanitize(input.owner_name),
     phone: sanitize(input.phone),
@@ -74,11 +78,25 @@ export async function createBooking(input: BookingInput) {
     additional_services: input.additional_services ?? [],
     total_price: input.total_price ?? null,
     message: input.message ? sanitize(input.message) : null,
+    user_id: userId,
   };
 
   const { error } = await supabase.from("bookings").insert(payload);
   if (error) throw error;
   return { ok: true };
+}
+
+export async function getMyBookings() {
+  const { data: sessionData } = await supabase.auth.getSession();
+  const uid = sessionData.session?.user?.id;
+  if (!uid) return [];
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("id, pet_type, arrival_date, departure_date, total_price, status, created_at")
+    .eq("user_id", uid)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data ?? [];
 }
 
 export async function createContactMessage(input: ContactInput) {

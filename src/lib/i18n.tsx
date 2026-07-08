@@ -285,6 +285,20 @@ const en: Dict = {
   dash_staff_intro: "Booking requests and client messages will appear here soon.",
   dash_admin_title: "Admin Dashboard",
   dash_admin_intro: "Business management tools will appear here soon.",
+  dash_my_bookings: "My Bookings",
+  dash_no_bookings: "You do not have any bookings yet.",
+  dash_create_booking: "Create Booking",
+  dash_loading: "Loading…",
+  dash_bookings_error: "Could not load your bookings. Please try again.",
+  dash_col_pet: "Pet",
+  dash_col_arrival: "Arrival",
+  dash_col_departure: "Departure",
+  dash_col_price: "Total",
+  dash_col_status: "Status",
+  booking_status_new: "New",
+  booking_status_confirmed: "Confirmed",
+  booking_status_cancelled: "Cancelled",
+  booking_status_completed: "Completed",
 };
 
 const ru: Dict = {

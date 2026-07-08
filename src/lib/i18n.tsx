@@ -1025,6 +1025,18 @@ const el: Dict = {
   pet_err_age: "Δώστε έγκυρη ηλικία.",
   pet_err_weight: "Δώστε έγκυρο βάρος.",
   pet_err_url: "Δώστε έγκυρο σύνδεσμο (https://…).",
+
+  book_select_pet: "Επιλέξτε αποθηκευμένο κατοικίδιο",
+  book_select_pet_none: "— Χειροκίνητα —",
+  book_no_pets_hint: "Αποθηκεύστε τα κατοικίδιά σας για γρήγορη κράτηση.",
+  book_add_pet_profile: "Προσθήκη κατοικίδιου",
+  book_stay_duration: "Διάρκεια διαμονής",
+  book_nights_one: "νύχτα",
+  book_nights_many: "νύχτες",
+  book_err_past: "Η ημερομηνία δεν μπορεί να είναι στο παρελθόν.",
+  dash_upcoming: "Επερχόμενες κρατήσεις",
+  dash_no_upcoming: "Δεν υπάρχουν επερχόμενες κρατήσεις.",
+  dash_calendar: "Ημερολόγιο",
 };
 
 const dicts: Record<Lang, Dict> = { en, ru, el };

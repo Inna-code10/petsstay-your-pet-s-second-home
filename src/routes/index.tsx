@@ -428,6 +428,7 @@ function Hero() {
 
 function BookingForm() {
   const { t } = useI18n();
+  const { user, fullName } = useAuth();
   const [pet, setPet] = useState<"dog" | "cat">("dog");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -436,6 +437,31 @@ function BookingForm() {
   const [departure, setDeparture] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const prefilledRef = useRef(false);
+
+  // Prefill from authenticated user's profile (fields remain editable)
+  useEffect(() => {
+    if (!user || prefilledRef.current) return;
+    let cancelled = false;
+    (async () => {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data } = await supabase
+        .from("profiles")
+        .select("full_name, phone, email")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (cancelled) return;
+      const nm = data?.full_name || fullName || "";
+      const ph = data?.phone || "";
+      const em = data?.email || user.email || "";
+      setName((v) => v || nm);
+      setPhone((v) => v || ph);
+      setEmail((v) => v || em);
+      prefilledRef.current = true;
+    })();
+    return () => { cancelled = true; };
+  }, [user, fullName]);
+
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();

@@ -879,6 +879,20 @@ const el: Dict = {
   dash_staff_intro: "Τα αιτήματα κρατήσεων και τα μηνύματα πελατών θα εμφανίζονται εδώ σύντομα.",
   dash_admin_title: "Πίνακας διαχειριστή",
   dash_admin_intro: "Εργαλεία διαχείρισης θα εμφανίζονται εδώ σύντομα.",
+  dash_my_bookings: "Οι κρατήσεις μου",
+  dash_no_bookings: "Δεν έχετε ακόμη κρατήσεις.",
+  dash_create_booking: "Δημιουργία κράτησης",
+  dash_loading: "Φόρτωση…",
+  dash_bookings_error: "Αδυναμία φόρτωσης κρατήσεων. Δοκιμάστε ξανά.",
+  dash_col_pet: "Κατοικίδιο",
+  dash_col_arrival: "Άφιξη",
+  dash_col_departure: "Αναχώρηση",
+  dash_col_price: "Σύνολο",
+  dash_col_status: "Κατάσταση",
+  booking_status_new: "Νέα",
+  booking_status_confirmed: "Επιβεβαιωμένη",
+  booking_status_cancelled: "Ακυρωμένη",
+  booking_status_completed: "Ολοκληρωμένη",
 };
 
 const dicts: Record<Lang, Dict> = { en, ru, el };

@@ -437,7 +437,11 @@ function BookingForm() {
   const [departure, setDeparture] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [myPets, setMyPets] = useState<Array<{ id: string; pet_name: string; pet_type: string }>>([]);
+  const [selectedPetId, setSelectedPetId] = useState<string>("");
   const prefilledRef = useRef(false);
+
+  const todayIso = new Date().toISOString().slice(0, 10);
 
   // Prefill from authenticated user's profile (fields remain editable)
   useEffect(() => {
@@ -462,11 +466,37 @@ function BookingForm() {
     return () => { cancelled = true; };
   }, [user, fullName]);
 
+  // Load saved pets for logged-in users
+  useEffect(() => {
+    if (!user) { setMyPets([]); return; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const { getMyPets } = await import("@/lib/services");
+        const rows = await getMyPets();
+        if (!cancelled) setMyPets(rows as Array<{ id: string; pet_name: string; pet_type: string }>);
+      } catch (err) { console.error("[BookingForm pets]", err); }
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
+
+  const nights = useMemo(() => {
+    if (!arrival || !departure || arrival > departure) return 0;
+    const a = new Date(arrival + "T00:00:00");
+    const d = new Date(departure + "T00:00:00");
+    return Math.max(0, Math.round((d.getTime() - a.getTime()) / 86400000));
+  }, [arrival, departure]);
+
+  function onSelectSavedPet(id: string) {
+    setSelectedPetId(id);
+    if (!id) return;
+    const p = myPets.find((x) => x.id === id);
+    if (p && (p.pet_type === "dog" || p.pet_type === "cat")) setPet(p.pet_type);
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErrorMsg("");
-    // basic validation
     if (!name.trim() || !phone.trim() || !email.trim() || !arrival || !departure) {
       setStatus("error"); setErrorMsg(t("book_err_required")); return;
     }
@@ -475,6 +505,9 @@ function BookingForm() {
     }
     if (!/^[+\d][\d\s\-()]{5,}$/.test(phone.trim())) {
       setStatus("error"); setErrorMsg(t("book_err_phone")); return;
+    }
+    if (arrival < todayIso) {
+      setStatus("error"); setErrorMsg(t("book_err_past")); return;
     }
     if (arrival > departure) {
       setStatus("error"); setErrorMsg(t("book_err_dates")); return;
@@ -487,7 +520,7 @@ function BookingForm() {
         arrival_date: arrival, departure_date: departure,
       });
       setStatus("success");
-      setName(""); setPhone(""); setEmail(""); setArrival(""); setDeparture("");
+      setName(""); setPhone(""); setEmail(""); setArrival(""); setDeparture(""); setSelectedPetId("");
       setTimeout(() => setStatus("idle"), 4000);
     } catch (err) {
       console.error("[BookingForm]", err);

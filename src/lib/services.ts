@@ -59,7 +59,7 @@ export function validateContact(input: ContactInput): ValidationError[] {
 
 /* --------------------------- Mutations --------------------------- */
 
-export async function createBooking(input: BookingInput) {
+export async function createBooking(input: BookingInput, language?: string) {
   const errs = validateBooking(input);
   if (errs.length) throw new Error("validation_failed");
 
@@ -81,9 +81,26 @@ export async function createBooking(input: BookingInput) {
     user_id: userId,
   };
 
-  const { error } = await supabase.from("bookings").insert(payload);
+  const { data, error } = await supabase.from("bookings").insert(payload).select("id").single();
   if (error) throw error;
-  return { ok: true };
+  // Fire-and-forget transactional email (never blocks booking success).
+  void sendBookingEmail(data.id, "booking_created", language);
+  return { ok: true, id: data.id };
+}
+
+async function sendBookingEmail(
+  booking_id: string,
+  event_type: "booking_created" | "booking_confirmed" | "booking_cancelled" | "booking_completed",
+  language?: string,
+) {
+  try {
+    await supabase.functions.invoke("send-booking-email", {
+      body: { booking_id, event_type, language: language ?? "en" },
+    });
+  } catch (e) {
+    // Never surface email errors to the client; internal notifications still record the event.
+    console.warn("send-booking-email invoke failed", e);
+  }
 }
 
 export async function getMyBookings() {

@@ -58,7 +58,7 @@ function statusClass(s: string) {
 }
 
 export function BookingsManager({ allowDelete = false }: { allowDelete?: boolean }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [bookings, setBookings] = useState<Booking[] | null>(null);
   const [pets, setPets] = useState<Pet[]>([]);
   const [error, setError] = useState("");

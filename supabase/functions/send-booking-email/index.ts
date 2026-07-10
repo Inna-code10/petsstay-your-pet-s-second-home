@@ -365,16 +365,8 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Language: payload > profile preferred_language > 'en'
-    let lang: Lang = pickLang(body.language);
-    if (!body.language && booking.user_id) {
-      const { data: prof } = await admin
-        .from("profiles")
-        .select("preferred_language")
-        .eq("user_id", booking.user_id)
-        .maybeSingle();
-      if (prof?.preferred_language) lang = pickLang(prof.preferred_language);
-    }
+    // Language: payload (from active UI language) > 'en'
+    const lang: Lang = pickLang(body.language);
     const t = T[lang];
 
     const results: Record<string, unknown> = {};

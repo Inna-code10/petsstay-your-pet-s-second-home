@@ -103,6 +103,7 @@ export type Database = {
           created_at: string
           id: string
           message: string | null
+          read_at: string | null
           status: Database["public"]["Enums"]["notification_status"]
           title: string
           type: string
@@ -112,6 +113,7 @@ export type Database = {
           created_at?: string
           id?: string
           message?: string | null
+          read_at?: string | null
           status?: Database["public"]["Enums"]["notification_status"]
           title: string
           type: string
@@ -121,6 +123,7 @@ export type Database = {
           created_at?: string
           id?: string
           message?: string | null
+          read_at?: string | null
           status?: Database["public"]["Enums"]["notification_status"]
           title?: string
           type?: string

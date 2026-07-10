@@ -427,7 +427,7 @@ function Hero() {
 /* --------------------------- BOOKING FORM --------------------------- */
 
 function BookingForm() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { user, fullName } = useAuth();
   const [pet, setPet] = useState<"dog" | "cat">("dog");
   const [name, setName] = useState("");

@@ -337,46 +337,87 @@ async function deliver(
   }
 }
 
+/* ---------------- Validation ---------------- */
+
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const EVENTS: ReadonlySet<EventType> = new Set([
+  "booking_created",
+  "booking_confirmed",
+  "booking_cancelled",
+  "booking_completed",
+]);
+
+// Map each event to the booking.status it must reflect in the DB.
+// booking_created is allowed regardless of starting status (typically "new").
+const EVENT_REQUIRES_STATUS: Record<EventType, string | null> = {
+  booking_created: null,
+  booking_confirmed: "confirmed",
+  booking_cancelled: "cancelled",
+  booking_completed: "completed",
+};
+
+function bad(status: number, error: string) {
+  return new Response(JSON.stringify({ error }), {
+    status,
+    headers: { ...CORS, "Content-Type": "application/json" },
+  });
+}
+
 /* ---------------- Handler ---------------- */
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: CORS });
+  if (req.method !== "POST") return bad(405, "method_not_allowed");
+
   try {
-    const body = (await req.json()) as Payload;
-    if (!body?.booking_id || !body?.event_type) {
-      return new Response(JSON.stringify({ error: "invalid_payload" }), {
-        status: 400,
-        headers: { ...CORS, "Content-Type": "application/json" },
-      });
+    // Cap payload size — any legitimate payload is < 1KB.
+    const raw = await req.text();
+    if (raw.length > 2048) return bad(413, "payload_too_large");
+
+    let body: Partial<Payload>;
+    try {
+      body = JSON.parse(raw);
+    } catch {
+      return bad(400, "invalid_json");
     }
 
+    // Strict schema: only booking_id, event_type, language are read.
+    // Recipient / subject / HTML / admin address are NEVER taken from payload.
+    const booking_id = typeof body.booking_id === "string" ? body.booking_id : "";
+    const event_type = body.event_type as EventType;
+    if (!UUID_RE.test(booking_id)) return bad(400, "invalid_booking_id");
+    if (!EVENTS.has(event_type)) return bad(400, "invalid_event_type");
+    const lang: Lang = pickLang(body.language);
+
+    // Load authoritative booking (service role, single id, safe columns only).
     const { data: booking, error } = await admin
       .from("bookings")
       .select(
         "id,owner_name,phone,email,pet_type,number_of_pets,arrival_date,departure_date,total_price,status,message,user_id",
       )
-      .eq("id", body.booking_id)
+      .eq("id", booking_id)
       .maybeSingle();
     if (error) throw error;
-    if (!booking) {
-      return new Response(JSON.stringify({ error: "booking_not_found" }), {
-        status: 404,
-        headers: { ...CORS, "Content-Type": "application/json" },
-      });
+    if (!booking) return bad(404, "booking_not_found");
+
+    // Authorize the event against DB state. A client cannot trigger
+    // confirmed / cancelled / completed unless staff/admin already updated
+    // bookings.status via the RLS-protected UPDATE policy.
+    const required = EVENT_REQUIRES_STATUS[event_type];
+    if (required && booking.status !== required) {
+      return bad(403, "event_not_authorized");
     }
 
-    // Language: payload (from active UI language) > 'en'
-    const lang: Lang = pickLang(body.language);
     const t = T[lang];
-
     const results: Record<string, unknown> = {};
 
-    // Client email (all events)
+    // Client email — recipient always comes from the stored booking record.
     if (booking.email) {
-      const { subject, html } = buildClient(body.event_type, booking as BookingRow, t);
+      const { subject, html } = buildClient(event_type, booking as BookingRow, t);
       results.client = await deliver(
         booking.id,
-        body.event_type,
+        event_type,
         booking.email,
         lang,
         subject,
@@ -384,12 +425,12 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Admin email only on booking_created
-    if (body.event_type === "booking_created" && ADMIN_EMAIL) {
+    // Admin email only on booking_created — recipient from server secret.
+    if (event_type === "booking_created" && ADMIN_EMAIL) {
       const { subject, html } = buildAdmin(booking as BookingRow, t);
       results.admin = await deliver(
         booking.id,
-        `${body.event_type}_admin`,
+        `${event_type}_admin`,
         ADMIN_EMAIL,
         lang,
         subject,
@@ -403,9 +444,6 @@ Deno.serve(async (req) => {
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     console.error("send-booking-email error:", msg);
-    return new Response(JSON.stringify({ error: "internal_error", detail: msg }), {
-      status: 500,
-      headers: { ...CORS, "Content-Type": "application/json" },
-    });
+    return bad(500, "internal_error");
   }
 });

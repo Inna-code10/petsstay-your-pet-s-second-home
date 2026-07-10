@@ -98,6 +98,56 @@ export type Database = {
         }
         Relationships: []
       }
+      email_deliveries: {
+        Row: {
+          booking_id: string | null
+          created_at: string
+          error: string | null
+          event_type: string
+          failed_at: string | null
+          id: string
+          language: string
+          provider_message_id: string | null
+          recipient: string
+          sent_at: string | null
+          status: string
+        }
+        Insert: {
+          booking_id?: string | null
+          created_at?: string
+          error?: string | null
+          event_type: string
+          failed_at?: string | null
+          id?: string
+          language?: string
+          provider_message_id?: string | null
+          recipient: string
+          sent_at?: string | null
+          status?: string
+        }
+        Update: {
+          booking_id?: string | null
+          created_at?: string
+          error?: string | null
+          event_type?: string
+          failed_at?: string | null
+          id?: string
+          language?: string
+          provider_message_id?: string | null
+          recipient?: string
+          sent_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_deliveries_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           created_at: string

@@ -211,6 +211,7 @@ interface BookingRow {
   status: string | null;
   message: string | null;
   user_id: string | null;
+  preferred_language: string | null;
 }
 
 function buildClient(event: EventType, b: BookingRow, t: Record<string, string>) {

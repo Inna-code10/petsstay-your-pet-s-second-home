@@ -281,34 +281,48 @@ async function deliver(
   subject: string,
   html: string,
 ) {
-  // Idempotency: reserve row via ON CONFLICT DO NOTHING, then check status.
-  const { data: existing } = await admin
+  // Atomic reservation: try to INSERT first. The unique index on
+  // (booking_id, event_type, recipient) makes this race-safe — two concurrent
+  // callers cannot both reserve, and a duplicate call after a successful send
+  // is rejected before we ever hit Resend.
+  const { data: ins, error: insErr } = await admin
     .from("email_deliveries")
-    .select("id,status")
-    .eq("booking_id", booking_id)
-    .eq("event_type", event_type)
-    .eq("recipient", recipient)
+    .insert({
+      booking_id,
+      event_type,
+      recipient,
+      language,
+      status: "pending",
+    })
+    .select("id")
     .maybeSingle();
 
-  if (existing && existing.status === "sent") {
-    return { skipped: true };
-  }
+  let rowId: string | undefined = ins?.id;
 
-  let rowId = existing?.id as string | undefined;
-  if (!rowId) {
-    const { data: ins, error: insErr } = await admin
+  if (insErr) {
+    // 23505 = unique_violation. Someone else already reserved this delivery.
+    const code = (insErr as { code?: string }).code;
+    if (code !== "23505") throw insErr;
+
+    const { data: existing } = await admin
       .from("email_deliveries")
-      .insert({
-        booking_id,
-        event_type,
-        recipient,
-        language,
-        status: "pending",
-      })
-      .select("id")
-      .single();
-    if (insErr) throw insErr;
-    rowId = ins.id;
+      .select("id,status")
+      .eq("booking_id", booking_id)
+      .eq("event_type", event_type)
+      .eq("recipient", recipient)
+      .maybeSingle();
+
+    if (!existing) return { skipped: true };
+    // Already sent, or another worker owns the pending row — do not resend.
+    if (existing.status === "sent" || existing.status === "pending") {
+      return { skipped: true, reason: existing.status };
+    }
+    // Previous attempt failed — retry on the same row.
+    rowId = existing.id;
+    await admin
+      .from("email_deliveries")
+      .update({ status: "pending", error: null })
+      .eq("id", rowId);
   }
 
   try {

@@ -90,7 +90,7 @@ export async function createBooking(input: BookingInput, language?: string) {
   // no fire-and-forget browser call needed.
   return { ok: true, id: data.id };
 }
-}
+
 
 export async function getMyBookings() {
   const { data: sessionData } = await supabase.auth.getSession();

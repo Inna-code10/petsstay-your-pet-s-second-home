@@ -520,7 +520,7 @@ function BookingForm() {
         owner_name: name, phone, email, pet_type: pet,
         arrival_date: arrival, departure_date: departure,
         message: message.trim() ? message.trim() : null,
-      });
+      }, lang);
       setStatus("success");
       setName(""); setPhone(""); setEmail(""); setArrival(""); setDeparture(""); setMessage(""); setSelectedPetId("");
       setTimeout(() => setStatus("idle"), 4000);

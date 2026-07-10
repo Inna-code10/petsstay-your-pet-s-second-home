@@ -14,6 +14,7 @@ import {
 import { useI18n } from "@/lib/i18n";
 import { ProtectedShell } from "@/components/DashboardShell";
 import { BookingsManager } from "@/components/BookingsManager";
+import { NotificationsPanel } from "@/components/NotificationBell";
 import {
   getAdminStats,
   getClientsOverview,

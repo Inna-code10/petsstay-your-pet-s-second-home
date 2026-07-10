@@ -3,6 +3,7 @@ import { PawPrint, LogOut } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 import { useI18n } from "@/lib/i18n";
 import { useAuth, type AppRole } from "@/hooks/use-auth";
+import { NotificationBell } from "@/components/NotificationBell";
 
 const rank: Record<AppRole, number> = { client: 1, staff: 2, admin: 3 };
 

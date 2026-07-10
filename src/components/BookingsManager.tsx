@@ -131,7 +131,7 @@ export function BookingsManager({ allowDelete = false }: { allowDelete?: boolean
     try {
       setBusyId(id);
       setError("");
-      await updateBookingStatus(id, status);
+      await updateBookingStatus(id, status, lang);
       setBookings((prev) => prev?.map((b) => (b.id === id ? { ...b, status } : b)) ?? prev);
       setFlash(t("crm_success"));
       setTimeout(() => setFlash(""), 2500);

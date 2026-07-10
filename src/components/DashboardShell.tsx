@@ -80,6 +80,7 @@ export function ProtectedShell({
                 {t("auth_hello")}, <span className="font-semibold text-foreground">{fullName}</span>
               </span>
             )}
+            <NotificationBell />
             <button
               onClick={async () => {
                 await signOut();

@@ -151,12 +151,10 @@ export async function getBookings() {
   return data ?? [];
 }
 
-export async function updateBookingStatus(id: string, status: BookingStatus, language?: string) {
+export async function updateBookingStatus(id: string, status: BookingStatus, _language?: string) {
   const { error } = await supabase.from("bookings").update({ status }).eq("id", id);
   if (error) throw error;
-  if (status === "confirmed" || status === "cancelled" || status === "completed") {
-    void sendBookingEmail(id, `booking_${status}` as const, language);
-  }
+  // Status-change emails are dispatched server-side by a database trigger.
   return { ok: true };
 }
 

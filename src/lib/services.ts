@@ -162,9 +162,12 @@ export async function getBookings() {
   return data ?? [];
 }
 
-export async function updateBookingStatus(id: string, status: BookingStatus) {
+export async function updateBookingStatus(id: string, status: BookingStatus, language?: string) {
   const { error } = await supabase.from("bookings").update({ status }).eq("id", id);
   if (error) throw error;
+  if (status === "confirmed" || status === "cancelled" || status === "completed") {
+    void sendBookingEmail(id, `booking_${status}` as const, language);
+  }
   return { ok: true };
 }
 

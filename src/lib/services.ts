@@ -67,6 +67,8 @@ export async function createBooking(input: BookingInput, language?: string) {
   const { data: sessionData } = await supabase.auth.getSession();
   const userId = sessionData.session?.user?.id ?? null;
 
+  const lang = language === "ru" || language === "el" ? language : "en";
+
   const payload = {
     owner_name: sanitize(input.owner_name),
     phone: sanitize(input.phone),
@@ -79,29 +81,16 @@ export async function createBooking(input: BookingInput, language?: string) {
     total_price: input.total_price ?? null,
     message: input.message ? sanitize(input.message) : null,
     user_id: userId,
+    preferred_language: lang,
   };
 
   const { data, error } = await supabase.from("bookings").insert(payload).select("id").single();
   if (error) throw error;
-  // Fire-and-forget transactional email (never blocks booking success).
-  void sendBookingEmail(data.id, "booking_created", language);
+  // Email delivery is triggered server-side by a database trigger (pg_net) —
+  // no fire-and-forget browser call needed.
   return { ok: true, id: data.id };
 }
 
-async function sendBookingEmail(
-  booking_id: string,
-  event_type: "booking_created" | "booking_confirmed" | "booking_cancelled" | "booking_completed",
-  language?: string,
-) {
-  try {
-    await supabase.functions.invoke("send-booking-email", {
-      body: { booking_id, event_type, language: language ?? "en" },
-    });
-  } catch (e) {
-    // Never surface email errors to the client; internal notifications still record the event.
-    console.warn("send-booking-email invoke failed", e);
-  }
-}
 
 export async function getMyBookings() {
   const { data: sessionData } = await supabase.auth.getSession();
@@ -162,12 +151,10 @@ export async function getBookings() {
   return data ?? [];
 }
 
-export async function updateBookingStatus(id: string, status: BookingStatus, language?: string) {
+export async function updateBookingStatus(id: string, status: BookingStatus, _language?: string) {
   const { error } = await supabase.from("bookings").update({ status }).eq("id", id);
   if (error) throw error;
-  if (status === "confirmed" || status === "cancelled" || status === "completed") {
-    void sendBookingEmail(id, `booking_${status}` as const, language);
-  }
+  // Status-change emails are dispatched server-side by a database trigger.
   return { ok: true };
 }
 

@@ -211,6 +211,7 @@ interface BookingRow {
   status: string | null;
   message: string | null;
   user_id: string | null;
+  preferred_language: string | null;
 }
 
 function buildClient(event: EventType, b: BookingRow, t: Record<string, string>) {
@@ -402,18 +403,20 @@ Deno.serve(async (req) => {
     const event_type = body.event_type as EventType;
     if (!UUID_RE.test(booking_id)) return bad(400, "invalid_booking_id");
     if (!EVENTS.has(event_type)) return bad(400, "invalid_event_type");
-    const lang: Lang = pickLang(body.language);
 
     // Load authoritative booking (service role, single id, safe columns only).
     const { data: booking, error } = await admin
       .from("bookings")
       .select(
-        "id,owner_name,phone,email,pet_type,number_of_pets,arrival_date,departure_date,total_price,status,message,user_id",
+        "id,owner_name,phone,email,pet_type,number_of_pets,arrival_date,departure_date,total_price,status,message,user_id,preferred_language",
       )
       .eq("id", booking_id)
       .maybeSingle();
     if (error) throw error;
     if (!booking) return bad(404, "booking_not_found");
+
+    // Authoritative language comes from the booking record, not the caller.
+    const lang: Lang = pickLang(booking.preferred_language ?? body.language);
 
     // Authorize the event against DB state. A client cannot trigger
     // confirmed / cancelled / completed unless staff/admin already updated

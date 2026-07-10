@@ -832,6 +832,18 @@ const ru: Dict = {
   dash_upcoming: "Ближайшие бронирования",
   dash_no_upcoming: "Нет ближайших бронирований.",
   dash_calendar: "Календарь",
+  notif_title: "Уведомления",
+  notif_empty: "Пока нет уведомлений.",
+  notif_mark: "Прочитано",
+  notif_mark_all: "Прочитать все",
+  notif_loading: "Загрузка…",
+  notif_error: "Не удалось загрузить уведомления.",
+  notif_type_booking_created: "Новая заявка на бронирование",
+  notif_type_booking_confirmed: "Бронирование подтверждено",
+  notif_type_booking_cancelled: "Бронирование отменено",
+  notif_type_booking_completed: "Бронирование завершено",
+  notif_type_payment_pending: "Ожидание оплаты",
+  notif_type_system: "Системное уведомление",
 };
 
 const el: Dict = {

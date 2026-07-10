@@ -411,6 +411,18 @@ const en: Dict = {
   dash_upcoming: "Upcoming bookings",
   dash_no_upcoming: "No upcoming bookings.",
   dash_calendar: "Calendar",
+  notif_title: "Notifications",
+  notif_empty: "No notifications yet.",
+  notif_mark: "Mark as read",
+  notif_mark_all: "Mark all as read",
+  notif_loading: "Loading…",
+  notif_error: "Could not load notifications.",
+  notif_type_booking_created: "New booking request",
+  notif_type_booking_confirmed: "Booking confirmed",
+  notif_type_booking_cancelled: "Booking cancelled",
+  notif_type_booking_completed: "Booking completed",
+  notif_type_payment_pending: "Payment pending",
+  notif_type_system: "System notification",
 };
 
 const ru: Dict = {

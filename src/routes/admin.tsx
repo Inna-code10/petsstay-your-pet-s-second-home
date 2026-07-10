@@ -67,6 +67,10 @@ function AdminDashboard() {
         {tab === "clients" && <ClientsTable />}
         {tab === "pets" && <PetsTable />}
       </div>
+
+      <div className="mt-12">
+        <NotificationsPanel scope="operational" />
+      </div>
     </div>
   );
 }

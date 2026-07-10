@@ -1253,6 +1253,18 @@ const el: Dict = {
   dash_upcoming: "Επερχόμενες κρατήσεις",
   dash_no_upcoming: "Δεν υπάρχουν επερχόμενες κρατήσεις.",
   dash_calendar: "Ημερολόγιο",
+  notif_title: "Ειδοποιήσεις",
+  notif_empty: "Δεν υπάρχουν ειδοποιήσεις ακόμη.",
+  notif_mark: "Σήμανση ως αναγνωσμένο",
+  notif_mark_all: "Σήμανση όλων ως αναγνωσμένα",
+  notif_loading: "Φόρτωση…",
+  notif_error: "Αδυναμία φόρτωσης ειδοποιήσεων.",
+  notif_type_booking_created: "Νέο αίτημα κράτησης",
+  notif_type_booking_confirmed: "Η κράτηση επιβεβαιώθηκε",
+  notif_type_booking_cancelled: "Η κράτηση ακυρώθηκε",
+  notif_type_booking_completed: "Η κράτηση ολοκληρώθηκε",
+  notif_type_payment_pending: "Εκκρεμής πληρωμή",
+  notif_type_system: "Ειδοποίηση συστήματος",
 };
 
 const dicts: Record<Lang, Dict> = { en, ru, el };

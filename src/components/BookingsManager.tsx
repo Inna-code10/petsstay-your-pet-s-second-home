@@ -58,7 +58,7 @@ function statusClass(s: string) {
 }
 
 export function BookingsManager({ allowDelete = false }: { allowDelete?: boolean }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [bookings, setBookings] = useState<Booking[] | null>(null);
   const [pets, setPets] = useState<Pet[]>([]);
   const [error, setError] = useState("");
@@ -131,7 +131,7 @@ export function BookingsManager({ allowDelete = false }: { allowDelete?: boolean
     try {
       setBusyId(id);
       setError("");
-      await updateBookingStatus(id, status);
+      await updateBookingStatus(id, status, lang);
       setBookings((prev) => prev?.map((b) => (b.id === id ? { ...b, status } : b)) ?? prev);
       setFlash(t("crm_success"));
       setTimeout(() => setFlash(""), 2500);

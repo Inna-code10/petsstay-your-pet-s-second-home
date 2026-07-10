@@ -411,6 +411,18 @@ const en: Dict = {
   dash_upcoming: "Upcoming bookings",
   dash_no_upcoming: "No upcoming bookings.",
   dash_calendar: "Calendar",
+  notif_title: "Notifications",
+  notif_empty: "No notifications yet.",
+  notif_mark: "Mark as read",
+  notif_mark_all: "Mark all as read",
+  notif_loading: "Loading…",
+  notif_error: "Could not load notifications.",
+  notif_type_booking_created: "New booking request",
+  notif_type_booking_confirmed: "Booking confirmed",
+  notif_type_booking_cancelled: "Booking cancelled",
+  notif_type_booking_completed: "Booking completed",
+  notif_type_payment_pending: "Payment pending",
+  notif_type_system: "System notification",
 };
 
 const ru: Dict = {
@@ -820,6 +832,18 @@ const ru: Dict = {
   dash_upcoming: "Ближайшие бронирования",
   dash_no_upcoming: "Нет ближайших бронирований.",
   dash_calendar: "Календарь",
+  notif_title: "Уведомления",
+  notif_empty: "Пока нет уведомлений.",
+  notif_mark: "Прочитано",
+  notif_mark_all: "Прочитать все",
+  notif_loading: "Загрузка…",
+  notif_error: "Не удалось загрузить уведомления.",
+  notif_type_booking_created: "Новая заявка на бронирование",
+  notif_type_booking_confirmed: "Бронирование подтверждено",
+  notif_type_booking_cancelled: "Бронирование отменено",
+  notif_type_booking_completed: "Бронирование завершено",
+  notif_type_payment_pending: "Ожидание оплаты",
+  notif_type_system: "Системное уведомление",
 };
 
 const el: Dict = {
@@ -1229,6 +1253,18 @@ const el: Dict = {
   dash_upcoming: "Επερχόμενες κρατήσεις",
   dash_no_upcoming: "Δεν υπάρχουν επερχόμενες κρατήσεις.",
   dash_calendar: "Ημερολόγιο",
+  notif_title: "Ειδοποιήσεις",
+  notif_empty: "Δεν υπάρχουν ειδοποιήσεις ακόμη.",
+  notif_mark: "Σήμανση ως αναγνωσμένο",
+  notif_mark_all: "Σήμανση όλων ως αναγνωσμένα",
+  notif_loading: "Φόρτωση…",
+  notif_error: "Αδυναμία φόρτωσης ειδοποιήσεων.",
+  notif_type_booking_created: "Νέο αίτημα κράτησης",
+  notif_type_booking_confirmed: "Η κράτηση επιβεβαιώθηκε",
+  notif_type_booking_cancelled: "Η κράτηση ακυρώθηκε",
+  notif_type_booking_completed: "Η κράτηση ολοκληρώθηκε",
+  notif_type_payment_pending: "Εκκρεμής πληρωμή",
+  notif_type_system: "Ειδοποίηση συστήματος",
 };
 
 const dicts: Record<Lang, Dict> = { en, ru, el };

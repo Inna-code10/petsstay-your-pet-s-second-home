@@ -7,6 +7,7 @@ import { ProtectedShell } from "@/components/DashboardShell";
 import { getMyBookings, getBookingCalendarEvents } from "@/lib/services";
 import { MyPets } from "@/components/MyPets";
 import { Calendar } from "@/components/ui/calendar";
+import { NotificationsPanel } from "@/components/NotificationBell";
 
 export const Route = createFileRoute("/dashboard")({
   ssr: false,
@@ -40,6 +41,9 @@ function DashboardPage() {
         <MyBookings />
       </div>
       <MyPets />
+      <div className="mt-12">
+        <NotificationsPanel scope="mine" />
+      </div>
     </ProtectedShell>
   );
 }

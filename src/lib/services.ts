@@ -369,3 +369,93 @@ export async function deletePet(id: string) {
   if (error) throw error;
   return { ok: true };
 }
+
+/* --------------------------- Notifications --------------------------- */
+
+export type NotificationType =
+  | "booking_created"
+  | "booking_confirmed"
+  | "booking_cancelled"
+  | "booking_completed"
+  | "payment_pending"
+  | "system";
+
+export type NotificationRow = {
+  id: string;
+  user_id: string | null;
+  type: string;
+  title: string;
+  message: string | null;
+  status: "pending" | "sent" | "failed";
+  read_at: string | null;
+  created_at: string;
+};
+
+export async function createNotification(input: {
+  user_id?: string | null;
+  type: NotificationType | string;
+  title: string;
+  message?: string | null;
+}) {
+  const { error } = await supabase.from("notifications").insert({
+    user_id: input.user_id ?? null,
+    type: input.type,
+    title: sanitize(input.title),
+    message: input.message ? sanitize(input.message) : null,
+    status: "sent",
+  });
+  if (error) throw error;
+  return { ok: true };
+}
+
+export async function getMyNotifications(limit = 50): Promise<NotificationRow[]> {
+  const { data: sessionData } = await supabase.auth.getSession();
+  const uid = sessionData.session?.user?.id;
+  if (!uid) return [];
+  const { data, error } = await supabase
+    .from("notifications")
+    .select("*")
+    .eq("user_id", uid)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []) as NotificationRow[];
+}
+
+export async function getAdminNotifications(limit = 50): Promise<NotificationRow[]> {
+  // Operational notifications live with user_id = null and are visible to staff/admin per RLS.
+  const { data, error } = await supabase
+    .from("notifications")
+    .select("*")
+    .is("user_id", null)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []) as NotificationRow[];
+}
+
+export async function markNotificationAsRead(id: string) {
+  const { error } = await supabase
+    .from("notifications")
+    .update({ read_at: new Date().toISOString() })
+    .eq("id", id)
+    .is("read_at", null);
+  if (error) throw error;
+  return { ok: true };
+}
+
+export async function markAllNotificationsAsRead(scope: "mine" | "operational") {
+  const nowIso = new Date().toISOString();
+  let q = supabase.from("notifications").update({ read_at: nowIso }).is("read_at", null);
+  if (scope === "mine") {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const uid = sessionData.session?.user?.id;
+    if (!uid) return { ok: true };
+    q = q.eq("user_id", uid);
+  } else {
+    q = q.is("user_id", null);
+  }
+  const { error } = await q;
+  if (error) throw error;
+  return { ok: true };
+}

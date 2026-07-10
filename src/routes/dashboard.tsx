@@ -41,6 +41,9 @@ function DashboardPage() {
         <MyBookings />
       </div>
       <MyPets />
+      <div className="mt-12">
+        <NotificationsPanel scope="mine" />
+      </div>
     </ProtectedShell>
   );
 }

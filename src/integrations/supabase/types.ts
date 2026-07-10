@@ -27,6 +27,7 @@ export type Database = {
           owner_name: string
           pet_type: string
           phone: string
+          preferred_language: string
           status: Database["public"]["Enums"]["booking_status"]
           total_price: number | null
           user_id: string | null
@@ -43,6 +44,7 @@ export type Database = {
           owner_name: string
           pet_type: string
           phone: string
+          preferred_language?: string
           status?: Database["public"]["Enums"]["booking_status"]
           total_price?: number | null
           user_id?: string | null
@@ -59,6 +61,7 @@ export type Database = {
           owner_name?: string
           pet_type?: string
           phone?: string
+          preferred_language?: string
           status?: Database["public"]["Enums"]["booking_status"]
           total_price?: number | null
           user_id?: string | null

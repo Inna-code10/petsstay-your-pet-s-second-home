@@ -84,11 +84,24 @@ export async function createBooking(input: BookingInput, language?: string) {
     preferred_language: lang,
   };
 
-  const { data, error } = await supabase.from("bookings").insert(payload).select("id").single();
-  if (error) throw error;
+  // Do NOT chain .select() here: for anonymous bookings there is no SELECT
+  // policy that matches the newly-inserted row (client SELECT policy requires
+  // user_id = auth.uid()), so PostgREST's return=representation fails the RLS
+  // check on the RETURNING clause and surfaces as
+  // "new row violates row-level security policy". The INSERT itself succeeds.
+  const { error } = await supabase.from("bookings").insert(payload);
+  if (error) {
+    if (import.meta.env.DEV) {
+      // Surface the exact Postgres/PostgREST error during development so
+      // future failures are diagnosable — user still sees the localized
+      // message from the form.
+      console.error("[createBooking] insert failed", error);
+    }
+    throw error;
+  }
   // Email delivery is triggered server-side by a database trigger (pg_net) —
   // no fire-and-forget browser call needed.
-  return { ok: true, id: data.id };
+  return { ok: true };
 }
 
 

@@ -21,6 +21,9 @@ import galleryCatRelax from "@/assets/gallery/cat-relax.jpg.asset.json";
 import galleryDog from "@/assets/gallery/dog.jpg.asset.json";
 import galleryCatDogsEats from "@/assets/gallery/cat-dogs-eats.jpg.asset.json";
 import galleryPetCuddle from "@/assets/gallery/pet-cuddle.jpg.asset.json";
+import teamMaria from "@/assets/team/maria.jpg.asset.json";
+import teamAndreas from "@/assets/team/andreas.jpg.asset.json";
+import teamElena from "@/assets/team/elena.jpg.asset.json";
 
 const unsplash = (id: string, w = 1600, q = 80) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=${q}`;

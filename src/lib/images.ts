@@ -21,6 +21,9 @@ import galleryCatRelax from "@/assets/gallery/cat-relax.jpg.asset.json";
 import galleryDog from "@/assets/gallery/dog.jpg.asset.json";
 import galleryCatDogsEats from "@/assets/gallery/cat-dogs-eats.jpg.asset.json";
 import galleryPetCuddle from "@/assets/gallery/pet-cuddle.jpg.asset.json";
+import teamMaria from "@/assets/team/maria.jpg.asset.json";
+import teamAndreas from "@/assets/team/andreas.jpg.asset.json";
+import teamElena from "@/assets/team/elena.jpg.asset.json";
 
 const unsplash = (id: string, w = 1600, q = 80) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=${q}`;
@@ -49,14 +52,14 @@ export const galleryImages: { src: string; alt: string; span?: string; position?
   { src: galleryCatDogsEats.url, alt: "Dog and cat eating together from bowls during daily feeding time", span: "", position: "object-top" },
 ];
 
-/** Team portraits — authentic Unsplash portraits (2 women, 1 man). */
+/** Team portraits — local project assets provided by the client. */
 export const teamPhotos = {
-  // Maria Ioannou — Founder & Head Caretaker (woman, 30s, confident & warm)
-  member1: unsplash("photo-1573496359142-b8d87734a5a2", 800),
-  // Andreas Petrou — Resident Veterinarian (man, 30s, kind & approachable)
-  member2: unsplash("photo-1531427186611-ecfd6d936c79", 800),
-  // Elena Georgiou — Senior Pet Sitter (woman, late 20s, gentle & natural)
-  member3: unsplash("photo-1760552069335-07d43ca826f4", 800),
+  // Maria Ioannou — Founder & Head Caretaker
+  member1: teamMaria.url,
+  // Andreas Petrou — Resident Veterinarian
+  member2: teamAndreas.url,
+  // Elena Georgiou — Senior Pet Sitter
+  member3: teamElena.url,
 };
 
 

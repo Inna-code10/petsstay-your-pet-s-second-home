@@ -1005,7 +1005,7 @@ function Team() {
           {members.map((m) => (
             <div key={m.name} className="card-lift rounded-[28px] overflow-hidden bg-white border border-border shadow-[var(--shadow-soft)]">
               <div className="relative">
-                <img src={m.img} alt={m.name} loading="lazy" width={600} height={700} className="w-full h-80 object-cover" />
+                <img src={m.img} alt={m.name} loading="lazy" width={600} height={700} className="w-full h-80 object-cover object-top" />
                 <div className="absolute top-4 left-4 glass rounded-full px-3 py-1 text-xs font-bold">
                   {m.years}+ {t("team_years_exp")}
                 </div>

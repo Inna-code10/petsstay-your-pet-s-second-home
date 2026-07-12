@@ -54,8 +54,8 @@ const team3 = teamPhotos.member3;
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { property: "og:image", content: "https://petsstay.lovable.app/og.jpg" },
-      { name: "twitter:image", content: "https://petsstay.lovable.app/og.jpg" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/ffafefdb-62bb-49ec-b878-7005084abfba" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/ffafefdb-62bb-49ec-b878-7005084abfba" },
     ],
   }),
   component: Landing,

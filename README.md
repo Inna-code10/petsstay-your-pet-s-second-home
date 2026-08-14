@@ -1,163 +1,269 @@
-# PetSStay
+# PetSStay — Pet Boarding & Booking Platform
 
-Educational MVP for a pet-boarding business. Multilingual (EN / RU / EL) marketing site, booking flow, client dashboard, staff CRM, and admin dashboard, backed by Lovable Cloud (Supabase) with RLS, database-triggered transactional email via Resend, and internal notifications.
+A full-stack pet boarding web application for booking professional cat and dog care services in Limassol, Cyprus.
 
-## Main Features
+🌐 **Live Demo:**  
+https://petsstay-your-pet-s-second-home.vercel.app/
 
-- Premium responsive landing page (desktop / tablet / mobile)
-- EN / RU / EL language switcher with persisted UI language
-- Anonymous **and** authenticated booking form with optional message / special request
-- Client dashboard: My Bookings, My Pets CRUD, saved-pet booking selector, notifications bell
-- Staff CRM: booking list with search, status/pet filters, details, linked pets, confirm / cancel / mark-completed actions
-- Admin dashboard: overview stats, bookings, clients, pets, estimated revenue, deletion of test bookings
-- Internal notification system (operational + per-user) with mark-as-read
-- Transactional emails via Resend for `booking_created`, `booking_confirmed`, `booking_cancelled`, `booking_completed`, dispatched from Postgres triggers using `pg_net` — browser-independent
-- Email delivery tracking with duplicate prevention and failed-delivery retry
-- Per-booking `preferred_language` persistence for multilingual emails
+💻 **GitHub Repository:**  
+https://github.com/Inna-code10/petsstay-your-pet-s-second-home
 
-## Technology Stack
+---
 
-- TanStack Start v1 (React 19, Vite 7), TypeScript strict
-- Tailwind CSS v4, shadcn/ui, Radix primitives
-- Lovable Cloud (Supabase): Postgres, Auth, RLS, Edge Functions, `pg_net`, `pg_cron`
-- Resend (transactional email provider)
-- File-based routing under `src/routes/`
+## Overview
 
-## Authentication and Roles
+PetSStay is a responsive pet boarding and booking platform designed to provide a simple and convenient way for pet owners to arrange professional care for their cats and dogs.
 
-- Email/password auth via Supabase Auth
-- Roles stored in a dedicated `user_roles` table with `app_role` enum (`client`, `staff`, `admin`)
-- `has_role(user_id, role)` is a `SECURITY DEFINER` function used inside RLS policies to avoid recursion
-- Trigger `handle_new_user` inserts a `profiles` row and assigns the default `client` role on signup
-- Only `admin` role can insert into `user_roles` (RLS). Users **cannot** self-elevate.
-- Route protection via `ProtectedShell` + role-aware redirect for `/dashboard`, `/staff`, `/admin`
+The application combines a modern React frontend with Supabase backend services and includes authentication, booking management, multilingual support, database integration, and transactional email functionality.
 
-## Client Functionality (`/dashboard`)
+The project was developed as a personal full-stack portfolio project with a focus on responsive UI, practical user flows, backend integration, and secure handling of environment variables.
 
-- My Bookings list with status
-- My Pets: create / edit / delete, medical/behavior notes, vaccination status, photo URL
-- Saved-pet quick-select in booking form
-- Booking calendar / upcoming dates
-- Personal notifications with unread count
+---
 
-## Staff Functionality (`/staff`)
+## Key Features
 
-- List all bookings, search by name/email/phone, filter by status and pet type
-- Booking detail drawer with linked pets (for authenticated bookings)
-- Actions: **Confirm**, **Cancel**, **Mark completed** — each triggers a status-change email
-- Operational notification feed
+- Online pet boarding booking
+- User registration and authentication
+- Booking creation and management
+- Cat and dog care services
+- Service and pricing information
+- Multilingual interface:
+  - English
+  - Russian
+  - Greek
+- Responsive design for desktop, tablet, and mobile devices
+- Supabase database integration
+- PostgreSQL data storage
+- Transactional booking emails
+- Supabase Edge Functions
+- Resend email integration
+- Secure environment variable management
+- Production deployment with Vercel
 
-## Admin Functionality (`/admin`)
+---
 
-- Overview: totals, per-status counts, clients, pets, estimated revenue
-- Full bookings, clients, and pets tables
-- Delete test bookings
-- Operational notification feed
+## Tech Stack
 
-## Database and Supabase
+### Frontend
 
-Public schema tables: `bookings`, `pets`, `profiles`, `user_roles`, `contacts`, `notifications`, `email_deliveries`.
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
 
-Key triggers / functions:
-- `notify_on_booking` — writes internal notifications on booking insert/status-change
-- `dispatch_booking_email` — after insert & after status update, posts to the `send-booking-email` Edge Function via `pg_net.http_post`
-- `handle_new_user` — provisions profile + default `client` role on signup
+### Backend & Database
 
-## RLS Security
+- Supabase
+- PostgreSQL
+- Supabase Authentication
+- Supabase Edge Functions
 
-- RLS enabled on all sensitive tables
-- `bookings`: anonymous INSERT allowed (no SELECT for anon); authenticated users SELECT/UPDATE their own; staff/admin SELECT/UPDATE all
-- `pets`: users manage their own; staff/admin SELECT all
-- `profiles`: users read/update their own; staff/admin SELECT all
-- `user_roles`: users read their own roles; only admins INSERT/UPDATE/DELETE
-- `notifications`: users read their own; staff/admin read operational (null-user) rows
-- `email_deliveries`: service-role only
+### Email
 
-## Notifications
+- Resend
 
-Two audiences from one table:
-- **Personal** — `user_id = auth.uid()` rows
-- **Operational** — `user_id IS NULL` rows visible to staff/admin
+### Deployment & Development
 
-The bell component polls, shows unread count, supports mark-as-read and mark-all-as-read.
+- Vercel
+- Git
+- GitHub
+- npm
 
-## Email Architecture
+---
 
-1. Booking insert or status change fires the `dispatch_booking_email` trigger.
-2. Trigger calls `pg_net.http_post` → Supabase Edge Function `send-booking-email`.
-3. Edge Function (service role, server-only):
-   - Validates payload (UUID, allowed event, size limit, POST-only)
-   - Loads the authoritative booking row and derives recipient + language server-side
-   - Enforces event authorization: status-change events only send when `bookings.status` already matches
-   - Reserves an `email_deliveries` row atomically (unique index on `booking_id + event_type + recipient`) to prevent duplicates
-   - Renders EN / RU / EL template with full HTML escaping of user content
-   - Sends via Resend; records `sent` / `failed`
-4. Failed rows can be retried on subsequent invocations; `sent` rows are never re-sent.
-5. Frontend never calls the email function directly — email failures cannot break booking writes.
+## Application Architecture
 
-## Supported Languages
+PetSStay uses Supabase as the backend platform for authentication, database operations, and server-side functionality.
 
-- English (`en`), Russian (`ru`), Greek (`el`)
-- Language switcher in header
-- `bookings.preferred_language` stores the language the customer used when booking, so status emails match
+The React application communicates with Supabase using environment variables provided through Vite.
 
-## Local Development
+Transactional booking emails are handled separately through a Supabase Edge Function and Resend.
 
-```bash
-bun install
-bun run dev        # Vite dev server
-bun run build      # production build
-bunx tsgo --noEmit # typecheck
+```text
+React / TypeScript
+        │
+        ▼
+     Supabase
+   ┌────┴─────┐
+   │          │
+   ▼          ▼
+Auth      PostgreSQL
+              │
+              ▼
+       Supabase Edge Function
+              │
+              ▼
+            Resend
+              │
+              ▼
+        Booking Emails
 ```
 
-## Required Environment Variables (no secret values here)
+---
 
-Client (public, in `.env`):
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_PUBLISHABLE_KEY`
-- `VITE_SUPABASE_PROJECT_ID`
+## Environment Variables
 
-Server-only (Edge Function / server runtime):
-- `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `SUPABASE_PUBLISHABLE_KEY`
-- `RESEND_API_KEY`
-- `PETSSTAY_FROM_EMAIL` (must be an address on a Resend-verified domain)
-- `PETSSTAY_ADMIN_EMAIL` (BCC / ops notifications)
+Environment variables are used to keep configuration and sensitive credentials outside the source code.
 
-Never commit real secret values. Do not expose the service-role or Resend key to the client bundle.
+The repository contains a `.env.example` file showing the required variable names without exposing real credentials.
 
-## Production Configuration Requirements
+### Frontend
 
-To send real transactional emails in production:
-1. Own a domain and verify it in Resend (SPF / DKIM records).
-2. Set `PETSSTAY_FROM_EMAIL` to an address on that verified domain (e.g. `bookings@yourdomain.com`).
-3. Keep `RESEND_API_KEY` server-only.
-4. Without a verified domain, Resend will only deliver to the account owner's own email — production sending will fail for other recipients.
+```env
+VITE_SUPABASE_PROJECT_ID=
+VITE_SUPABASE_PUBLISHABLE_KEY=
+VITE_SUPABASE_URL=
+```
 
-## Creating Staff / Admin Test Accounts
+### Supabase
 
-There is no self-service Staff/Admin registration by design. To provision test roles:
+```env
+SUPABASE_PROJECT_ID=
+SUPABASE_PUBLISHABLE_KEY=
+SUPABASE_URL=
+```
 
-1. Register a new user through `/register` (this becomes a normal `client` account with a profile).
-2. Repeat for a second account intended to become Admin.
-3. In the Lovable Cloud backend, open the SQL editor and run:
-   ```sql
-   -- Find the user's UUID
-   select id, email from auth.users where email = 'staff@example.com';
+### Supabase Edge Function / Email
 
-   -- Assign the staff role
-   insert into public.user_roles (user_id, role)
-   values ('<uuid-from-above>', 'staff')
-   on conflict do nothing;
+```env
+RESEND_API_KEY=
+PETSSTAY_ADMIN_EMAIL=
+PETSSTAY_FROM_EMAIL=
+SUPABASE_SERVICE_ROLE_KEY=
+```
 
-   -- Assign the admin role for the other account
-   insert into public.user_roles (user_id, role)
-   values ('<uuid-of-admin-account>', 'admin')
-   on conflict do nothing;
-   ```
-4. Sign out and sign back in with each account. `/staff` and `/admin` now become accessible respectively.
+> Sensitive values such as API keys and service role credentials are not committed to the repository.
 
-## Current Status
+---
 
-**Educational MVP — feature-complete.** All core flows (anonymous & authenticated bookings, client dashboard, staff CRM, admin dashboard, internal notifications, database-triggered emails, multilingual support, RLS) are implemented and typecheck cleanly. Payments (Stripe), WhatsApp automation, and push notifications are intentionally out of scope.
+## Transactional Emails
+
+PetSStay uses a Supabase Edge Function to send transactional booking emails through Resend.
+
+The email functionality supports booking-related events such as:
+
+- Booking created
+- Booking confirmed
+- Booking cancelled
+- Booking completed
+
+Server-side credentials are accessed through environment variables rather than being hardcoded in the application source code.
+
+---
+
+## Multilingual Support
+
+The application supports three interface languages:
+
+- 🇬🇧 English
+- 🇷🇺 Russian
+- 🇬🇷 Greek
+
+Users can switch languages directly from the navigation interface.
+
+---
+
+## Responsive Design
+
+PetSStay is designed to work across different screen sizes, including:
+
+- Desktop
+- Tablet
+- Mobile
+
+The interface adapts navigation, content sections, booking elements, and layouts for smaller screens.
+
+---
+
+## AI-Assisted Development
+
+AI-assisted development tools were used during parts of the development process to support UI prototyping, code generation, debugging, and development workflow.
+
+The project was reviewed and refined manually, including:
+
+- application structure;
+- frontend and backend integration;
+- Supabase configuration;
+- environment variable management;
+- Git and GitHub configuration;
+- deployment configuration;
+- security review;
+- debugging and testing.
+
+This project demonstrates practical experience working with AI-assisted development while maintaining understanding and control of the resulting application architecture and codebase.
+
+---
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Inna-code10/petsstay-your-pet-s-second-home.git
+```
+
+### 2. Open the project
+
+```bash
+cd petsstay-your-pet-s-second-home
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Configure environment variables
+
+Create a local `.env` file based on `.env.example`.
+
+```bash
+cp .env.example .env
+```
+
+Add your own Supabase configuration values to the local `.env` file.
+
+Do not commit the `.env` file to GitHub.
+
+### 5. Start the development server
+
+```bash
+npm run dev
+```
+
+Open the local URL displayed by Vite in your browser.
+
+---
+
+## Deployment
+
+The frontend is deployed with Vercel.
+
+Production environment variables are configured securely through Vercel rather than being stored in the GitHub repository.
+
+Supabase Edge Function secrets are managed separately in the server-side Supabase environment.
+
+🌐 **Live Application:**  
+https://petsstay-your-pet-s-second-home.vercel.app/
+
+---
+
+## Security
+
+The project follows basic security practices for handling application credentials:
+
+- `.env` is excluded from Git tracking
+- `.env.example` contains variable names only
+- API credentials are not hardcoded in source files
+- Supabase service role credentials are kept server-side
+- Edge Function secrets are accessed through environment variables
+- Production frontend variables are managed through Vercel
+
+---
+
+## Project Status
+
+PetSStay is a completed personal portfolio project and is deployed online.
+
+The application demonstrates full-stack development skills including frontend development, authentication, database integration, server-side functions, transactional emails, deployment, and environment configuration.
